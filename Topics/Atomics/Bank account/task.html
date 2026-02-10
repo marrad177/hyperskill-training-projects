@@ -1,0 +1,5 @@
+<div class="step-text">
+<p></p>
+<p>Create a simple, thread-safe <code class="java">BankAccount</code> class that uses an <code class="java">AtomicLong</code> to represent the account balance. Implement methods for depositing, withdrawing, and checking the balance, ensuring that these operations are atomic and safe from race conditions when accessed by multiple threads. The withdrawal method must subtract the given amount if there is a sufficient amount on the balance and return true, otherwise return false and leave the balance unchanged.</p>
+<p>In the output, we check the balance after each action described in the input. </p><br><b>Sample Input:</b><br><pre><code class="language-no-highlight">Initialize account with balance: 1000<br>Deposit: 500<br>Withdraw: 500<br>Withdraw: 1500</code></pre><br><b>Sample Output:</b><br><pre><code class="language-no-highlight">1000<br>1500<br>1000<br>1000<br></code></pre><br><br><br><font color="gray">Memory limit: 256 MB</font><br><font color="gray">Time limit: 5 seconds</font><br><br>
+</div>

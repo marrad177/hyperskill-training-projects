@@ -1,0 +1,17 @@
+type: edu
+files:
+  - name: src/Main.java
+    visible: true
+    learner_created: false
+  - name: test/ZookeeperTest.java
+    visible: true
+    learner_created: false
+  - name: src/Animal.java
+    visible: true
+    learner_created: true
+feedback_link: https://hyperskill.org/projects/229/stages/1149/implement#comment
+status: Solved
+feedback:
+  message: Congratulations!
+  time: "Tue, 27 Jan 2026 18:18:52 UTC"
+record: 3

@@ -1,0 +1,76 @@
+<div class="step-text">
+<h5 id="design-problem">Design problem</h5>
+<p><strong>Template Method</strong> is a <a class="theory-lookup not-relevant" href="/learn/step/5155" target="_blank" title="In Java, a behavioral pattern is a design pattern that is concerned with the interaction between objects. | There are about 12 design patterns that belong to this category, with the command pattern being one of the most commonly used. The purpose of the command pattern is to decouple the logic between a command and its consumer. It encapsulates all the data related to a command in one object, which typically consists of a set of methods, their parameters, and one or more objects that these methods belong to. This decoupling allows for flexibility, as changing a command does not affect its consumer. Other behavioral patterns include the state pattern, which is useful when the behavior of a class depends on its current state and changes during runtime.">behavioral pattern</a> that describes the common algorithm while subclasses implement steps of this algorithm. This pattern lets the subclasses implement the steps of the algorithm without changing that algorithm's skeleton.</p>
+<p>As an example of the <strong>Template Method</strong>, we will consider the working process. The algorithm contains three steps: go to work, work, go home. It's a very true-to-life example indeed.</p>
+<p>Suppose all workers go to work and go home in an absolutely identical manner. The working routine, however, is different and depends on the worker’s qualification. We can choose any profession, but the algorithm remains the same.</p>
+<h5 id="template-method-pattern">Template method pattern</h5>
+<p>An abstract base class implements standard algorithm steps and can provide a default implementation for custom steps. Specific subclasses provide concrete implementation for each of these steps.</p>
+<p>Template Method has the following components:</p>
+<ul><li><p><strong>Abstract Class</strong> describes primitive operations and the <a class="theory-lookup not-relevant" href="/learn/step/5155" target="_blank" title="In Java, a template method is a behavioral design pattern that outlines a common algorithm, allowing subclasses to implement specific steps of the algorithm without changing its overall structure. | This pattern is useful when the behavior of an algorithm can vary, and you want to avoid code duplication while implementing variations of the algorithm in subclasses. In this context, an abstract base class implements the template method, which contains the common algorithm's skeleton. Concrete subclasses then inherit this template method and provide their implementation for the primitive operations.">template method</a> itself which calls primitive operations;</p></li><li><p><strong>Concrete Class</strong> implements the primitive operations.</p></li></ul>
+<p></p>
+<p style="text-align: center;"><picture><img alt="Template method pattern" height="378" src="https://ucarecdn.com/b7fd06ca-19e2-449f-aaa1-8aca2a787ddf/" width="589"/></picture></p>
+<p></p>
+<p>Template Method is quite popular in Java frameworks. Here are a few examples where it is used in core Java libraries:</p>
+<ul><li><p>All non-<a class="theory-lookup not-relevant" href="/learn/step/5155" target="_blank" title="In Java, an abstract method is a method that is declared in an abstract class but does not contain an implementation. | It only includes a method signature, return type, and modifiers. The abstract keyword is used to declare an abstract method. Concrete subclasses of the abstract class must provide an implementation for these abstract methods. Since an abstract class cannot be instantiated, the purpose of an abstract method is to provide a common interface for its subclasses. If a class contains an abstract method, the class must be declared abstract as well.">abstract methods</a> of <code class="language-java">java.io.InputStream</code>, <code class="language-java">java.io.OutputStream</code>, <code class="language-java">java.io.Reader</code> and <code class="language-java">java.io.Writer</code></p></li><li><p>All non-abstract methods of <code class="language-java">java.util.AbstractList</code>, <code class="language-java">java.util.AbstractSet</code> and <code class="language-java">java.util.AbstractMap</code></p></li></ul>
+<h5 id="practice-example">Practice example</h5>
+<p>To demonstrate how the Template Method works, let's create an abstract class <code class="language-java">Worker</code> that describes the working routine. Then, let's add the template method:</p>
+<pre><code class="language-java">public abstract class Worker {
+
+    public void work() {
+        goToWork();
+
+        workingProcess();
+
+        goHome();
+    }
+
+    public void goToWork() {
+        System.out.println("= I'm going to work sadly =");
+    }
+
+    public void goHome() {
+        System.out.println("= I'm going home happy =");
+    }
+
+    public abstract void workingProcess();
+}</code></pre>
+<p></p>
+<p>The common algorithm of actions is already determined. Now, we will create two <a class="theory-lookup not-relevant" href="/learn/step/5155" target="_blank" title="In Java, a concrete class is a class that implements or extends a generic class or interface and provides concrete, non-generic types for its type parameters. | When creating an instance of a generic class, you must specify a concrete type that will replace the type parameter. This means that instead of using primitive types, you must use wrapper classes such as Integer, Double, or Character when creating an object of a generic class. A concrete class can process many different types in the same way, making it a powerful tool for writing flexible and reusable code.">concrete classes</a>: <code class="language-java">Programmer</code><strong> </strong>and <code class="language-java">Actor</code><strong>:</strong></p>
+<pre><code class="language-java">
+public class Programmer extends Worker {
+
+    @Override
+    public void workingProcess() {
+        System.out.println(" &gt; I'm a programmer");
+        System.out.println(" &gt; I drink coffee");
+        System.out.println(" &gt; I write code");
+        System.out.println(" &gt; I drink coffee again");
+        System.out.println(" &gt; I write code again");
+    }
+}
+
+public class Actor extends Worker {
+
+    @Override
+    public void workingProcess() {
+        System.out.println(" &gt; I'm an actor");
+        System.out.println(" &gt; I read a scenario");
+        System.out.println(" &gt; I get used to role ");
+        System.out.println(" &gt; I play a role");
+   }
+}
+</code></pre>
+<p></p>
+<p>In the <code class="language-java">TemplateMethodDemo</code> class we create programmer and actor instances and call the template method :</p>
+<pre><code class="language-java">public class TemplateMethodDemo {
+    public static void main(String[] args) {
+        Worker programmer = new Programmer();
+        Worker actor = new Actor();
+        programmer.work();
+        actor.work();
+    }
+}</code></pre>
+<h5 id="conclusion">Conclusion</h5>
+<p><strong>Template Method</strong> is applicable in the following cases:</p>
+<ul><li><p>When the behavior of an algorithm can vary, you let subclasses implement the behavior through <a class="theory-lookup not-relevant" href="/learn/step/5155" target="_blank" title="In Java, overriding is a mechanism that allows a subclass to provide a specific implementation of a superclass method. | When a method is overridden, the name and parameter of the subclass method must be exactly the same as the superclass method. However, the return type can be the same as the superclass method or a subtype of it. This feature is known as the covariant return type. Overriding enables subclasses to redefine behavior inherited from their superclass, allowing them to add their own unique flair to inherited methods.">overriding</a>;</p></li><li><p>When you want to avoid code duplication, implementing variations of the algorithm in subclasses;</p></li><li><p>When you want to allow easy subclassing so that users can extend the functionalities of your code without changing the original code.</p></li></ul>
+</div>

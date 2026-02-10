@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/LocalDate/10 days before/10 days before.iml" filepath="$PROJECT_DIR$/LocalDate/10 days before/10 days before.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalDateTime/Add 11 hours and print the date/Add 11 hours and print the date.iml" filepath="$PROJECT_DIR$/LocalDateTime/Add 11 hours and print the date/Add 11 hours and print the date.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Switch expression/Advantages of switch expressions/Advantages of switch expressions.iml" filepath="$PROJECT_DIR$/Switch expression/Advantages of switch expressions/Advantages of switch expressions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Output streams/Buffering/Buffering.iml" filepath="$PROJECT_DIR$/Output streams/Buffering/Buffering.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Output streams/Byte output streams/Byte output streams.iml" filepath="$PROJECT_DIR$/Output streams/Byte output streams/Byte output streams.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Try with resources/Can be fixed/Can be fixed.iml" filepath="$PROJECT_DIR$/Try with resources/Can be fixed/Can be fixed.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Math library/Compare the results/Compare the results.iml" filepath="$PROJECT_DIR$/Math library/Compare the results/Compare the results.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalDate/Convert numbers to days/Convert numbers to days.iml" filepath="$PROJECT_DIR$/LocalDate/Convert numbers to days/Convert numbers to days.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Output streams/Convert to char array/Convert to char array.iml" filepath="$PROJECT_DIR$/Output streams/Convert to char array/Convert to char array.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Input streams/Count words/Count words.iml" filepath="$PROJECT_DIR$/Input streams/Count words/Count words.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Runtime type checking/Counting 2D shapes/Counting 2D shapes.iml" filepath="$PROJECT_DIR$/Runtime type checking/Counting 2D shapes/Counting 2D shapes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Throwing exceptions/Days of the week/Days of the week.iml" filepath="$PROJECT_DIR$/Throwing exceptions/Days of the week/Days of the week.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Switch expression/Days of the week/Days of the week2.iml" filepath="$PROJECT_DIR$/Switch expression/Days of the week/Days of the week2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Input streams/Decoding Java FileInputStream usage/Decoding Java FileInputStream usage.iml" filepath="$PROJECT_DIR$/Input streams/Decoding Java FileInputStream usage/Decoding Java FileInputStream usage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Input streams/Discovering Java input streams/Discovering Java input streams.iml" filepath="$PROJECT_DIR$/Input streams/Discovering Java input streams/Discovering Java input streams.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Math library/Existing methods/Existing methods.iml" filepath="$PROJECT_DIR$/Math library/Existing methods/Existing methods.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Runtime type checking/File equality/File equality.iml" filepath="$PROJECT_DIR$/Runtime type checking/File equality/File equality.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalDate/Find all mondays/Find all mondays.iml" filepath="$PROJECT_DIR$/LocalDate/Find all mondays/Find all mondays.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Math library/Heron's formula/Heron's formula.iml" filepath="$PROJECT_DIR$/Math library/Heron's formula/Heron's formula.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Runtime type checking/Hierarchy of classes/Hierarchy of classes.iml" filepath="$PROJECT_DIR$/Runtime type checking/Hierarchy of classes/Hierarchy of classes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Try with resources/How to release/How to release.iml" filepath="$PROJECT_DIR$/Try with resources/How to release/How to release.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Input streams/Input streams/Input streams.iml" filepath="$PROJECT_DIR$/Input streams/Input streams/Input streams.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Try with resources/Is there an exception/Is there an exception.iml" filepath="$PROJECT_DIR$/Try with resources/Is there an exception/Is there an exception.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalDate/Leap Year Check  A Date's True Colors/Leap Year Check  A Date's True Colors.iml" filepath="$PROJECT_DIR$/LocalDate/Leap Year Check  A Date's True Colors/Leap Year Check  A Date's True Colors.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalDate/LocalDate/LocalDate.iml" filepath="$PROJECT_DIR$/LocalDate/LocalDate/LocalDate.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalDate/LocalDate class/LocalDate class.iml" filepath="$PROJECT_DIR$/LocalDate/LocalDate class/LocalDate class.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalDateTime/LocalDateTime/LocalDateTime.iml" filepath="$PROJECT_DIR$/LocalDateTime/LocalDateTime/LocalDateTime.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalTime/LocalTime/LocalTime.iml" filepath="$PROJECT_DIR$/LocalTime/LocalTime/LocalTime.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Switch expression/Making it compile/Making it compile.iml" filepath="$PROJECT_DIR$/Switch expression/Making it compile/Making it compile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Math library/Match method callings and their results/Match method callings and their results.iml" filepath="$PROJECT_DIR$/Math library/Match method callings and their results/Match method callings and their results.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Math library/Math library/Math library.iml" filepath="$PROJECT_DIR$/Math library/Math library/Math library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalDateTime/Merging date-time instances/Merging date-time instances.iml" filepath="$PROJECT_DIR$/LocalDateTime/Merging date-time instances/Merging date-time instances.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalTime/Millisecond precision/Millisecond precision.iml" filepath="$PROJECT_DIR$/LocalTime/Millisecond precision/Millisecond precision.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Output streams/Output streams/Output streams.iml" filepath="$PROJECT_DIR$/Output streams/Output streams/Output streams.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Output streams/OutputStream class/OutputStream class.iml" filepath="$PROJECT_DIR$/Output streams/OutputStream class/OutputStream class.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Runtime type checking/Pattern matching in practice/Pattern matching in practice.iml" filepath="$PROJECT_DIR$/Runtime type checking/Pattern matching in practice/Pattern matching in practice.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Throwing exceptions/Possible declaration/Possible declaration.iml" filepath="$PROJECT_DIR$/Throwing exceptions/Possible declaration/Possible declaration.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Input streams/Read into an array/Read into an array.iml" filepath="$PROJECT_DIR$/Input streams/Read into an array/Read into an array.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalDate/Representing a date/Representing a date.iml" filepath="$PROJECT_DIR$/LocalDate/Representing a date/Representing a date.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Input streams/Reverse input text/Reverse input text.iml" filepath="$PROJECT_DIR$/Input streams/Reverse input text/Reverse input text.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Runtime type checking/Runtime type checking/Runtime type checking.iml" filepath="$PROJECT_DIR$/Runtime type checking/Runtime type checking/Runtime type checking.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalDateTime/Same date and time/Same date and time.iml" filepath="$PROJECT_DIR$/LocalDateTime/Same date and time/Same date and time.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalTime/Same time/Same time.iml" filepath="$PROJECT_DIR$/LocalTime/Same time/Same time.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalTime/Seconds between two time points/Seconds between two time points.iml" filepath="$PROJECT_DIR$/LocalTime/Seconds between two time points/Seconds between two time points.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalTime/Seconds since start of a day/Seconds since start of a day.iml" filepath="$PROJECT_DIR$/LocalTime/Seconds since start of a day/Seconds since start of a day.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalTime/Some hours and minutes ago/Some hours and minutes ago.iml" filepath="$PROJECT_DIR$/LocalTime/Some hours and minutes ago/Some hours and minutes ago.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalDateTime/Subtracting hours and adding minutes/Subtracting hours and adding minutes.iml" filepath="$PROJECT_DIR$/LocalDateTime/Subtracting hours and adding minutes/Subtracting hours and adding minutes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Switch expression/Switch expression/Switch expression.iml" filepath="$PROJECT_DIR$/Switch expression/Switch expression/Switch expression.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Math library/The angle between vectors/The angle between vectors.iml" filepath="$PROJECT_DIR$/Math library/The angle between vectors/The angle between vectors.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Throwing exceptions/The most general statement/The most general statement.iml" filepath="$PROJECT_DIR$/Throwing exceptions/The most general statement/The most general statement.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Throwing exceptions/Throw an IOException/Throw an IOException.iml" filepath="$PROJECT_DIR$/Throwing exceptions/Throw an IOException/Throw an IOException.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Throwing exceptions/Throw an unchecked exception/Throw an unchecked exception.iml" filepath="$PROJECT_DIR$/Throwing exceptions/Throw an unchecked exception/Throw an unchecked exception.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Throwing exceptions/Throwable classes/Throwable classes.iml" filepath="$PROJECT_DIR$/Throwing exceptions/Throwable classes/Throwable classes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Throwing exceptions/Throwing exceptions/Throwing exceptions.iml" filepath="$PROJECT_DIR$/Throwing exceptions/Throwing exceptions/Throwing exceptions.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Topics.iml" filepath="$PROJECT_DIR$/.idea/Topics.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Try with resources/Try with resources/Try with resources.iml" filepath="$PROJECT_DIR$/Try with resources/Try with resources/Try with resources.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Output streams/Types of output streams/Types of output streams.iml" filepath="$PROJECT_DIR$/Output streams/Types of output streams/Types of output streams.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Runtime type checking/Who is who/Who is who.iml" filepath="$PROJECT_DIR$/Runtime type checking/Who is who/Who is who.iml" />
+      <module fileurl="file://$PROJECT_DIR$/LocalTime/Working with time/Working with time.iml" filepath="$PROJECT_DIR$/LocalTime/Working with time/Working with time.iml" />
+    </modules>
+  </component>
+</project>

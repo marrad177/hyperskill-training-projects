@@ -1,0 +1,9 @@
+type: unsupported
+custom_name: Is there an exception?
+files:
+  - name: src/Task.java
+    visible: true
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/13211#comment
+status: Solved
+record: -1

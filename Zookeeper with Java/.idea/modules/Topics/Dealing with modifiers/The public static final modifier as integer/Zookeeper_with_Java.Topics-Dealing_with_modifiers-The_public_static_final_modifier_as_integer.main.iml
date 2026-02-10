@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":Topics-Dealing_with_modifiers-The_public_static_final_modifier_as_integer:main" external.linked.project.path="$MODULE_DIR$/../../../../../Topics/Dealing with modifiers/The public static final modifier as integer" external.root.project.path="$MODULE_DIR$/../../../../.." external.system.id="GRADLE" external.system.module.group="Zookeeper with Java" external.system.module.type="sourceSet" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <output url="file://$MODULE_DIR$/../../../../../Topics/Dealing with modifiers/The public static final modifier as integer/out/production/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../../Topics/Dealing with modifiers/The public static final modifier as integer/src">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../Topics/Dealing with modifiers/The public static final modifier as integer/src" isTestSource="false" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

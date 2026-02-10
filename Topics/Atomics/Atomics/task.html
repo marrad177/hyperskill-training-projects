@@ -1,0 +1,167 @@
+<div class="step-text">
+<p>Are you sick of dealing with race conditions and synchronization problems in your multi-threaded applications? Look no further than <strong><a class="theory-lookup not-relevant" href="/learn/step/29304" target="_blank" title="In Java, an atomic variable is a type of variable that is guaranteed to be updated atomically, meaning that it will be treated as a single, indivisible unit of work in a concurrent or multi-threaded environment. | The Java API provides atomic classes and methods, such as AtomicInteger, AtomicLong, and AtomicReference, that allow developers to create and manipulate atomic variables. By using these atomic variables, developers can ensure that their code is safe and correct in the face of concurrent modification, while also achieving better performance and scalability.">atomic variables</a></strong>. Without the requirement for explicit synchronization, atomic variables offer a quick and effective way to carry out <a class="theory-lookup not-relevant" href="/learn/step/29304" target="_blank" title="In Java, thread-safety refers to the ability of a program to function correctly when accessed by multiple threads concurrently. | When shared data is accessed by multiple threads, there can be issues related to visibility and atomicity. To address these issues, Java provides the concept of a monitor, which is a special mechanism that controls concurrent access to an object. Each object in Java has an associated implicit monitor, and a thread can acquire a monitor, preventing other threads from acquiring it until the owner releases it. When it comes to collections, classic collections like ArrayList, HashMap, and HashSet are not thread-safe, which means that they do not provide thread-safety guarantees. As a result, when multiple threads access and modify these collections concurrently, it can lead to problems such as data inconsistency or runtime exceptions. To address this, Java provides synchronized collections like Vector, Hashtable, and Collections.synchronizedList, which are thread-safe but have lower performance.">thread-safe</a> operations.<br/>
+In this topic, we'll look at atomic variables in Java, how they function, and why they're so important for concurrent programming. You will have a firm grasp on using atomic variables to create multi-threaded programs that are more dependable and effective by the time you finish this chapter. Let's get started!</p>
+<h5 id="problem-with-non-atomic-operations">Problem with non-atomic operations</h5>
+<p>Several threads may simultaneously access and alter the same variables in multi-threaded systems, resulting in race conditions and other synchronization problems. Conventional <a class="theory-lookup not-relevant" href="/learn/step/29304" target="_blank" title="In Java, a non-atomic operation is an operation that consists of multiple steps. | This means that a non-atomic operation is not indivisible and can be broken down into smaller parts. Because of this, a thread may operate on an intermediate value of a non-atomic operation performed by another thread, leading to a problem called thread interference. This occurs when the sequence of steps of a non-atomic operation performed by several threads may overlap. For example, increment is a non-atomic operation, and even the reading and writing of a 64-bit value may not be atomic on some platforms. To make these operations atomic, fields should be declared using the volatile keyword in Java.">non-atomic operations</a> like increment and decrement operations are not <strong>thread-safe</strong>, meaning they can result in incorrect values being stored if several threads try to access the same variable simultaneously.<br/>
+Consider a counter program example in which several threads are attempting to increase a single shared counter variable.</p>
+<p>A bad counter class that is not thread-safe might look something like this:</p>
+<pre><code class="language-java">public class BadCounter {
+    private int count = 0;
+
+    public void increment() {
+        count++;
+    }
+
+    public int getCount() {
+        return count;
+    }
+}
+</code></pre>
+<p>The problem with this implementation is that the <code class="language-java">increment()</code> method is not atomic. In order to update a variable's value, we have first to read the current value from memory, update the read value, and then write the updated value back to memory. If this is not done atomically, two threads may concurrently execute <code class="language-java">increment()</code> and end up overwriting one another's modifications. Depending on the timing of the threads, the count can wind up being 1 instead of 2 if the initial count is 0 and two threads use <code class="language-java">increment()</code> simultaneously.</p>
+<h5 id="atomic-operations-to-the-rescue">Atomic operations to the rescue</h5>
+<p>Using atomic variables, you can carry out thread-safe operations without explicit synchronization. An <strong>atomic operation</strong> is an operation that is performed as a single, indivisible unit of work. In other words, an atomic operation is performed entirely or not at all. All operations on atomic variables are guaranteed to be thread-safe. A thread gets a <strong>lock </strong>on an atomic variable when it performs an operation to prevent concurrent modification by other threads. This ensures that the atomic variable's value is always accurate and consistent.</p>
+<p>Let's consider the previous example of the basic counter. To make this counter thread-safe, we can use an atomic variable instead of a regular integer. Here's an example of a thread-safe counter using <code class="language-java">AtomicInteger</code>:</p>
+<pre><code class="language-java">import java.util.concurrent.atomic.AtomicInteger;
+
+public class GoodCounter {
+    private AtomicInteger count = new AtomicInteger(0);
+
+    public void increment() {
+        count.incrementAndGet();
+    }
+
+    public int getCount() {
+        return count.get();
+    }
+}
+</code></pre>
+<p>In this case, the <code class="language-java">incrementAndGet()</code> method of the <code class="language-java">AtomicInteger</code> class is an atomic operation. When a thread calls this method, it acquires a lock on the <code class="language-java">count</code> variable to ensure that no other threads can modify it at the same time. This guarantees that the <code class="language-java">count</code> variable is always incremented correctly, even when multiple threads access it simultaneously.</p>
+<h5 id="atomics-api">Atomics API</h5>
+<p>The Java <code class="language-java">java.util.concurrent.atomic</code> package provides a set of classes that implement atomic operations on variables of various types. These classes are:</p>
+<ul>
+<li><code class="language-java">AtomicBoolean</code>: provides atomic operations on a <code class="language-java">boolean</code> value.</li>
+<li><code class="language-java">AtomicInteger</code>: provides atomic operations on an <code class="language-java">int</code> value.</li>
+<li><code class="language-java">AtomicLong</code>: provides atomic operations on a <code class="language-java">long</code> value.</li>
+<li><code class="language-java">AtomicReference</code>: provides atomic operations on an object reference.</li>
+</ul>
+<p>Each of these classes provides a set of methods for performing atomic operations on their corresponding types. Let's focus on the <code class="language-java">AtomicInteger</code> class and explore its methods:</p>
+<ul>
+<li><code class="language-java">get()</code> returns the current value of the <code class="language-java">AtomicInteger</code>.</li>
+</ul>
+<pre><code class="language-java">// create an AtomicInteger with an initial value of 0
+AtomicInteger atomicInt = new AtomicInteger(0);
+
+// get the current value of the AtomicInteger
+int currentValue = atomicInt.get();
+
+System.out.println(currentValue); // = 0</code></pre>
+<ul>
+<li><code class="language-java">getAndAdd(int delta)</code> adds <code class="language-java">delta</code> to the current value of the <code class="language-java">AtomicInteger</code> and returns the old value.</li>
+</ul>
+<pre><code class="language-java">int oldValue = atomicInt.getAndAdd(10);
+
+System.out.println(atomicInt); // = 10
+System.out.println(oldValue); // = 0
+</code></pre>
+<ul>
+<li><code class="language-java">getAndDecrement()</code> decrements the current value of the <code class="language-java">AtomicInteger</code> by 1 and returns the old value.</li>
+</ul>
+<pre><code class="language-java">oldValue = atomicInt.getAndDecrement();
+
+System.out.println(atomicInt); // = 9
+System.out.println(oldValue); // = 10
+</code></pre>
+<ul>
+<li><code class="language-java">getAndIncrement()</code> increments the current value of the <code class="language-java">AtomicInteger</code> by 1 and returns the old value.</li>
+</ul>
+<pre><code class="language-java">oldValue = atomicInt.getAndIncrement();
+
+System.out.println(atomicInt); // = 10
+System.out.println(oldValue); // = 9
+</code></pre>
+<ul>
+<li><code class="language-java">getAndSet(int newValue)</code> sets the <code class="language-java">AtomicInteger</code> to <code class="language-java">newValue</code> and returns the old value.</li>
+</ul>
+<pre><code class="language-java">oldValue = atomicInt.getAndSet(42);
+
+System.out.println(atomicInt); // = 42
+System.out.println(oldValue); // = 10</code></pre>
+<ul>
+<li><code class="language-java">addAndGet(int delta)</code> adds <code class="language-java">delta</code> to the current value of the <code class="language-java">AtomicInteger</code> and returns the new value.</li>
+</ul>
+<pre><code class="language-java">int newValue = atomicInt.addAndGet(5);
+
+System.out.println(atomicInt); // = 47
+System.out.println(newValue); // = 47</code></pre>
+<ul>
+</ul>
+<ul>
+<li><code class="language-java">decrementAndGet()</code> decrements the current value of the <code class="language-java">AtomicInteger</code> by 1 and returns the new value.</li>
+</ul>
+<pre><code class="language-java">newValue = atomicInt.decrementAndGet();
+
+System.out.println(newValue); // = 46</code></pre>
+<ul>
+<li><code class="language-java">incrementAndGet()</code> increments the current value of the <code class="language-java">AtomicInteger</code> by 1 and returns the new value</li>
+</ul>
+<pre><code class="language-java">newValue = atomicInt.incrementAndGet();
+
+System.out.println(newValue); // = 47</code></pre>
+<ul>
+<li><code class="language-java">compareAndSet(int expect, int update)</code> atomically sets the value to <code class="language-java">update</code> if the current value is equal to <code class="language-java">expect</code>.</li>
+</ul>
+<pre><code class="language-java">boolean success = atomicInt.compareAndSet(10, 20);
+
+System.out.println(atomicInt); // = 47
+System.out.println(success); // = false</code></pre>
+<ul>
+<li><code class="language-java">weakCompareAndSet(int expect, int update)</code> atomically sets the value to <code class="language-java">update</code> if the current value is equal to <code class="language-java">expect</code>. 
+
+	<p>The main difference between <code class="language-java">compareAndSet()</code> and <code class="language-java">weakCompareAndSet()</code> is in their memory semantics. The <code class="language-java">compareAndSet()</code> method provides a strong memory consistency guarantee, meaning that any changes made by one thread before calling it will be visible to any later calls to it by other threads.</p>
+<p>On the other hand, <code class="language-java">weakCompareAndSet()</code> guarantees less memory consistency. It only ensures that modifications made by one thread before the call to <code class="language-java">weakCompareAndSet()</code> are visible to subsequent calls to <code class="language-java">weakCompareAndSet()</code> by the same thread. This approach makes no promises about the visibility of modifications made by other threads.</p>
+</li>
+<li><code class="language-java">set(int newValue)</code> sets the value to <code class="language-java">newValue</code>.</li>
+</ul>
+<pre><code class="language-java">atomicInt.set(50);
+
+System.out.println(atomicInt); // = 50</code></pre>
+<ul>
+<li><code class="language-java">lazySet(int newValue)</code>: the value is eventually updated to <code class="language-java">newValue</code>, but this does not guarantee that any thread executing <code class="language-java">get()</code> will see the new value. The order of operations may also be changed. This absence of ordering guarantees might result in certain performance advantages. The operation can be done more <strong>rapidly </strong>and with less overhead than other atomic operations that offer ordering guarantees since there is no need to synchronize with other threads.</li>
+</ul>
+<p></p>
+<div class="alert alert-primary"> The names of the methods listed above were chosen with care, and the order of the words in the names reflects the functionality of the methods. When creating your own method, try to give it a meaningful name that gives the user a clear idea of what the method does without constantly looking up its documentation. </div>
+<h5 id="optimistic-vs-pessimistic-locking">Optimistic vs. pessimistic locking</h5>
+<p>The <code class="language-java">compareAndSet(expectedValue, newValue)</code> method mentioned above can be used in a pattern known as <strong><a class="theory-lookup not-relevant" href="/learn/step/29304" target="_blank" title="In Java, optimistic locking is a concurrent programming pattern that allows multiple threads to access and modify a shared resource without acquiring a full lock, thus improving performance and scalability. | The basic idea is to read the current value of the resource, perform some computation or modification, and then attempt to atomically set the modified value back into the resource using a compare-and-set operation. If the operation succeeds, the alteration is finished, and the thread can proceed. If it fails, another thread has already modified the resource, and the thread must handle the failure, typically by retrying the operation or using a different approach. Optimistic locking is generally faster and more scalable than pessimistic locking, but it may cause conflicts and retries, which can slow down the system's overall throughput if the conflict rate is significant.">optimistic locking</a></strong>. In this pattern, several threads can access and alter a shared resource concurrently, without requiring a full lock or blocking other threads.</p>
+<p>The basic idea of optimistic locking is to read the resource's current value, perform some computations or modifications on that value, and then attempt to set the modified value back into the resource atomically using <code class="language-java">compareAndSet()</code>. If the <code class="language-java">compareAndSet()</code> operation succeeds, the alteration is finished, and the thread can proceed. If it fails, another thread has already modified the resource, and the thread must address the failure somehow.</p>
+<p>Here's an example of how you can implement this pattern:</p>
+<pre><code class="language-java">AtomicInteger sharedResource = new AtomicInteger(0);
+
+while (true) {
+    int currentValue = sharedResource.get();
+    int modifiedValue = computeNewValue(currentValue); //do some work on the obtained value
+    
+    if (sharedResource.compareAndSet(currentValue, modifiedValue)) {
+        // The modification was successful, we can continue
+        break;
+    } else {
+        // Another thread modified the shared resource in the meantime,
+        // we must start over from the beginning
+        continue;
+    }
+}
+</code></pre>
+<p>In this example, the loop will continue until the <code class="language-java">compareAndSet</code> operation succeeds, meaning that the modification was successful and the thread can continue. </p>
+<p>The <code class="language-java">compareAndSet()</code> function makes use of the low-level <strong>Compare-And-Swap</strong> (CAS) operation of the CPU. This operation allows the writing of a value to a memory address, but only if the current value at that location matches an expected value. The CAS operation is frequently used in concurrent programming to perform atomic operations, such as <code class="language-java">compareAndSet()</code>.</p>
+<p>In contrast, <strong><a class="theory-lookup not-relevant" href="/learn/step/29304" target="_blank" title="In Java, pessimistic locking is a concurrent programming technique where a thread obtains a full lock on a shared resource before accessing or modifying it. | This approach guarantees better consistency, but it is more costly and can cause contention and blocking of other threads. Pessimistic locking is in contrast to optimistic locking, which allows multiple threads to access and alter a shared resource concurrently without requiring a full lock or blocking other threads. However, optimistic locking can cause conflicts and retries, slowing down the system's overall throughput if the conflict rate is significant.">pessimistic locking</a></strong> is when a thread obtains a <strong>full lock</strong> on a shared resource before accessing or altering it. Pessimistic locking is more costly and can cause contention and blocking of other threads, but it gives better consistency guarantees and may be more appropriate in some instances.</p>
+<p>In terms of performance, optimistic locking is generally faster and more scalable than pessimistic locking since it avoids the overhead of acquiring and releasing locks. Nevertheless, optimistic locking might cause conflicts and retries, slowing down the system's overall throughput if the conflict rate is significant.</p>
+<p>Finally, the choice between optimistic and pessimistic locking should depend on the application's unique needs and the desired balance of performance and consistency. Understanding the trade-offs between these two approaches allows you to choose the locking strategy that best suits your application.</p>
+<h5 id="conclusion">Conclusion</h5>
+<p>Let's summarize what you learned in this topic:</p>
+<ul>
+<li>You learned about the difference between atomic and non-atomic operations and why atomic operations are essential for concurrent programming.</li>
+<li>We covered the concept of atomic variables in Java and how to use them for safe, concurrent modification of shared resources.</li>
+<li>We introduced the <code class="language-java">Atomics</code> API, which provides a set of classes and methods for working with atomic variables and explored some key features and use cases for these classes and methods. </li>
+<li>The choice between optimistic and pessimistic locking depends on the specific requirements of the application and the acceptable trade-offs between performance and consistency.</li>
+</ul>
+<p>Overall, the Atomics API is an essential tool for any Java developer in concurrent or multi-threaded programming. By using atomic variables and the atomic classes and methods provided by the API, developers can ensure that their code is safe and correct in the face of concurrent modification, while also achieving better performance and scalability.</p>
+</div>

@@ -1,0 +1,51 @@
+<div class="step-text">
+<h5 id="when-arrays-are-not-enough">When arrays are not enough</h5>
+<p>The Java language supports arrays to store multiple values or objects of the same type together. An array is initialized with a predefined size during creation. The size cannot be changed in the future, and that imposes some limitations on their use for solving business problems. If we want to store more data, we need to create a new larger array and then copy the data in this array manually. This can be inefficient for programs that process a lot of data.</p>
+<h5 id="different-collections">Different collections</h5>
+<p>Fortunately, there is a set of containers called <strong>collections</strong> for <a class="theory-lookup not-relevant" href="/learn/step/3770" rel="noopener noreferrer nofollow" target="_blank" title="In Java, a grouping is referred to as a collection, which is used to gather elements into a single unit. | They are utilized for storing, retrieving, manipulating, and communicating aggregated data. Collections are more advanced and versatile than arrays because they can be resized, allowing you to add any number of elements to a collection. A collection will automatically manage the deletion of an element from any position. Additionally, collections offer a rich set of pre-implemented methods, making them more convenient and efficient for specific operations.">grouping</a> elements into a single unit. They are used to store, retrieve, manipulate, and communicate aggregated data.</p>
+<p><strong>Collections</strong> are more sophisticated and flexible than arrays. First of all, they are <strong>resizable</strong>: you can add any number of elements to a collection. A collection will automatically handle the deletion of an element from any position. The second point is collections provide a rich set of <strong>methods</strong> that are already implemented for you.</p>
+<p>There are several types of collections with different internal storage structures. You can choose a collection type that best matches your problem so that your most frequent operations will be convenient and efficient.</p>
+<p> </p>
+<p></p>
+<div class="alert alert-primary"><p>Actually, collections are representations of different <a class="theory-lookup not-relevant" href="/learn/step/3770" rel="noopener noreferrer nofollow" target="_blank" title="In Java, a data structure is a collection of elements that are grouped together in a specific way to allow for efficient storage, retrieval, and manipulation of data. | They are represented by different classes from the Java Standard Library and can be generic or non-generic. Data structures can be more sophisticated and flexible than arrays as they are resizable, allowing you to add any number of elements to a collection. Additionally, collections provide a rich set of methods that are already implemented for you, making it easier to perform common operations. Different types of collections have different internal storage structures, so you can choose a collection type that best matches your problem and optimizes your most frequent operations.">data structures</a> and abstract data types from computer science. It is good to understand the relationship between them and collections in Java. This will help you in programming interviews and in working to select an appropriate collection.</p></div>
+<p></p>
+<p> </p>
+<h5 id="features-of-collections">Features of collections</h5>
+<p>There are several specific features of collections in Java:</p>
+<ol><li><p>They are represented by different classes from the Java Standard Library.</p></li><li><p>All modern collections are <strong><a class="theory-lookup not-relevant" href="/learn/step/3770" rel="noopener noreferrer nofollow" target="_blank" title="In Java, a generic type is a generic class or interface that is parameterized over a type, which is determined when a developer creates an object of the class or invokes the method. | Generic types enable the writing of more abstract code and the development of reusable software libraries. A generic class, for example, named `C&lt;T&gt;` can store a value of some type `T`. It is possible to create an object with a concrete type, such as `C&lt;Integer&gt;` or `C&lt;String&gt;`. The class does not know the concrete type on which it operates, and the concrete type must be specified when creating an instance of the class.">generic types</a></strong> while old collections are <strong>non-generic</strong>. We will only focus on new collections. As regular generics, they can store any <a class="theory-lookup not-relevant" href="/learn/step/3770" rel="noopener noreferrer nofollow" target="_blank" title="In Java, a reference type is a type of variable that stores a reference to an object located elsewhere in memory, rather than storing the object's value directly. | When an object is created using the new operator, it returns a reference to the location of the object in memory, allowing access to its fields and methods. Reference types can be assigned to variables, passed as arguments to methods, and returned as values from methods. They are important for creating complex, object-oriented programs in Java. Unlike primitive types, which store their values directly, reference types store a reference to an object. When comparing reference types using the == operator, it compares the references (memory addresses) rather than the actual values. Additionally, assigning one value of a reference variable to another creates a copy of the reference, rather than the value itself. Reference types can also refer to a special value that represents the fact that it is not initialized yet or does not have a value. It is important to note that in Java, the heap is the region of memory where objects are stored and allocated dynamically during runtime.">reference types</a> including classes defined by you (like <code class="language-java">Person</code> or something else).</p></li><li><p>Collections can be <strong>mutable</strong> (possible to add and remove elements) and <strong>immutable</strong> (impossible to do that).</p></li></ol>
+<p>In addition to standard collections, there are a number of external libraries with collections. One such library is Guava Collections which was developed by Google. It can be used if standard collections are not enough to solve your problems.</p>
+<h5 id="the-simplest-collection-example">The simplest collection example</h5>
+<p>There is an example of a simple collection called <code class="language-java">ArrayList</code>. To use it, make the following import:</p>
+<pre><code class="language-java">java.util.ArrayList;</code></pre>
+<p>It works in a similar way to a regular array, but you do not have to manually resize it to add and remove elements.</p>
+<pre><code class="language-java">ArrayList&lt;String&gt; list = new ArrayList&lt;&gt;();
+
+list.add("first");
+list.add("second");
+list.add("third");
+
+System.out.println(list); // [first, second, third]
+
+System.out.println(list.get(0)); // first
+System.out.println(list.get(1)); // second
+System.out.println(list.get(2)); // third
+
+list.remove("first");
+
+System.out.println(list); // [second, third]
+
+System.out.println(list.size()); // 2</code></pre>
+<p> </p>
+<p></p>
+<div class="alert alert-primary"><p>Note, in this example, we used the <code class="language-java">get</code> method to access an element by its index. Unlike arrays, collections do not have the <code class="language-java">[]</code> operator.</p></div>
+<p></p>
+<p> </p>
+<p>We hope this is enough for the first acquaintance with collections. In further topics, you will learn about different kinds of collections in more detail. Now the main thing to understand is that using collections is not more difficult than using a regular array.</p>
+<p> </p>
+<p></p>
+<div class="alert alert-warning"><p>All modern collections are generic, so you can specify any reference type as a generic parameter and store it in a collection. But there is one restriction, collections cannot store primitive values at all (<code class="language-java">int</code>, <code class="language-java">long</code>, <code class="language-java">char</code>, <code class="language-java">double</code> and so on). You have to use one of the wrapper classes (<code class="language-java">Integer</code>, <code class="language-java">Long</code>, <code class="language-java">Character</code>, <code class="language-java">Double</code> or another one) instead.</p></div>
+<p></p>
+<p> </p>
+<h5 id="conclusion">Conclusion</h5>
+<p>Sometimes arrays are not flexible enough to store and manipulate your data. For that, Java provides collections — mostly <a class="theory-lookup not-relevant" href="/learn/step/3770" rel="noopener noreferrer nofollow" target="_blank" title="In Java, a generic class is a class that is parameterized over a type, allowing it to handle different data types in a uniform manner. | The type parameter is specified within angle brackets following the class name, and it can be used within the class body for fields, method arguments, return values, and local variables. The concrete type is determined when an object of the class is created or a method is invoked. Only reference types, such as arrays, standard classes, or custom classes, can be used as concrete types for generic classes. This approach enables the writing of more abstract and reusable code, as the same class or method can process multiple types in the same way.">generic classes</a> from the Java Standard Library or external libraries, either mutable or immutable, that are more adjusted to store objects for specific complicated purposes. It'll take you more than one topic to learn even about basic types of collections that represent different data structures and serve different purposes. Stay tuned!</p>
+</div>

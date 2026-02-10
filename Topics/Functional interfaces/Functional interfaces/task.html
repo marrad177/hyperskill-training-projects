@@ -1,0 +1,75 @@
+<div class="step-text">
+<p>In this topic, you will learn a new concept called <strong><a class="theory-lookup not-relevant" href="/learn/step/11636" target="_blank" title="In Java, a functional interface is a special kind of interface that contains a single abstract method, although it can also contain default, static, and non-abstract methods. | A functional interface can be implemented and instantiated using a lambda expression or a method reference. The Java compiler automatically creates a special hidden class for lambda expressions and method references. The annotation can be used to force checking whether an interface satisfies the requirement of the functional interface. The concept of functional interfaces is an essential part of functional programming in Java, which is built on top of object-oriented programming (OOP), especially interfaces and polymorphism.">functional interfaces</a></strong>. This is vital knowledge because these kinds of interfaces allow developers to use functional programming over the concepts from OOP and, in a sense, connect both of these worlds together. It is functional interfaces that make it possible to use <a class="theory-lookup not-relevant" href="/learn/step/11636" target="_blank" title="In Java, a lambda expression is a function that is not bound to a name (an anonymous function) and can be assigned to a variable. | It consists of a list of parameters followed by the body that can return a value. Lambda expressions are often used to pass a block of code as data to a method. They allow for more readable and concise code, and can be used in place of method references. Lambda expressions have a special type, and there are several types of lambda expressions defined in the Java standard library, such as Function and Predicate, both located in the java.util.function package.">lambda expressions</a>, <a class="theory-lookup not-relevant" href="/learn/step/11636" target="_blank" title="In Java, a method reference is a way to refer to a specific method by its name, which can be invoked at any time it is needed. | It is a more readable and easier to test alternative to lambda expressions. Method references can refer to both standard and custom methods. There are four kinds of method references: reference to a static method, reference to an instance method of an existing object, reference to an instance method of an object of a particular type, and reference to a constructor. For example, a reference to a static method can be created using the following general form: `ContainingClass::staticMethodName`.">method references</a>, and other functional stuff. We suppose that you are already familiar with interfaces, lambda expressions, and <a class="theory-lookup not-relevant" href="/learn/step/11636" target="_blank" title="In Java, an anonymous class is a small class that implements an interface or extends another class (concrete or abstract) and is declared and instantiated at the same time, without the need to declare a new named class. | It is called anonymous because it doesn't have a name identifier. Anonymous class enables you to declare and instantiate a class in a single statement, which is useful when you need to use a class that overrides some methods of another class or interface only once. The syntax of an anonymous class is similar to a constructor call, except that it contains a class definition in a block of code.">anonymous classes</a>. Now we are going to show you how they are all connected with each other.</p>
+<h5 id="functions-and-interfaces">Functions and interfaces</h5>
+<p>If an interface contains only a<strong> single <a class="theory-lookup not-relevant" href="/learn/step/11636" target="_blank" title="In Java, an abstract method is a method that is declared in an abstract class but does not contain an implementation. | It only includes a method signature, return type, and modifiers. The abstract keyword is used to declare an abstract method. Concrete subclasses of the abstract class must provide an implementation for these abstract methods. Since an abstract class cannot be instantiated, the purpose of an abstract method is to provide a common interface for its subclasses. If a class contains an abstract method, the class must be declared abstract as well.">abstract method</a></strong> (such an interface is sometimes called a <strong>SAM type</strong>), it can be considered as a function. In addition to standard ways of implementing interfaces through inheritance or anonymous classes, these interfaces can be implemented by using a lambda expression or a method reference.</p>
+<p>Here is a clone of the standard <code class="language-java">Function&lt;T, R&gt;</code> interface that demonstrates the basic idea:</p>
+<pre><code class="language-java">@FunctionalInterface 
+interface Func&lt;T, R&gt; { 
+    R apply(T val); // single abstract method
+}</code></pre>
+<p></p>
+<div class="alert alert-primary"><p>The annotation <code class="language-java">@FunctionalInterface</code> is used to mark functional interfaces and to raise a compile-time error if an interface doesn't satisfy the requirements of a functional interface. The use of this annotation is not mandatory but recommended.</p></div>
+<p></p>
+<p>The <code class="language-java">Func&lt;T, R&gt;</code> interface meets the requirements to be a functional interface because it has a single <code class="language-java">apply</code> method, which takes a value of the type <code class="language-java">T</code> and returns a result of the type <code class="language-java">R</code>.</p>
+<p>Here is an example of a lambda expression that implements this custom interface:</p>
+<pre><code class="language-java">Func&lt;Integer, Integer&gt; multiplier10 = n -&gt; n * 10;
+System.out.println(multiplier10.apply(5)); // 50</code></pre>
+<p>In a similar way, all standard functions can be represented as functional interfaces, including <code class="language-java">BiFunction&lt;T, U, R&gt;</code>. The concept of functional interfaces is another way to model functions instead of using regular methods.</p>
+<p>It is worth noticing, that <code class="language-java">static</code> and <code class="language-java">default</code> methods are allowed in functional interfaces because these methods are not abstract:</p>
+<pre><code class="language-java">@FunctionalInterface 
+interface Func&lt;T, R&gt; { 
+    R apply(T val);
+
+    static void doNothingStatic() { }
+
+    default void doNothingByDefault() { } 
+}</code></pre>
+<p>This interface is a valid functional interface as well.</p>
+<h5 id="implementing-functional-interfaces">Implementing functional interfaces</h5>
+<p>There are several ways to implement a functional interface. As you know from the previous OOP theory, it is impossible to directly create an instance of an interface. Then what should we do?</p>
+<p>First of all, we should implement the interface to create a <a class="theory-lookup not-relevant" href="/learn/step/11636" target="_blank" title="In Java, a concrete class is a class that implements or extends a generic class or interface and provides concrete, non-generic types for its type parameters. | When creating an instance of a generic class, you must specify a concrete type that will replace the type parameter. This means that instead of using primitive types, you must use wrapper classes such as Integer, Double, or Character when creating an object of a generic class. A concrete class can process many different types in the same way, making it a powerful tool for writing flexible and reusable code.">concrete class</a>. Then, create an instance of this concrete class. The main requirement is to implement the <code class="language-java">apply</code> method to get a concrete behavior.</p>
+<p>Let's consider three ways to do it.</p>
+<p><strong>1) Anonymous classes.</strong> </p>
+<p>Of course, like any other interface, a functional interface can be implemented by using an anonymous class or regular inheritance.</p>
+<p>To implement a functional interface let's create an anonymous class and override the <code class="language-java">apply</code> method. The overridden method calculates the square of a given value:</p>
+<pre><code class="language-java">Func&lt;Long, Long&gt; square = new Func&lt;Long, Long&gt;() {
+    @Override
+    public Long apply(Long val) {
+        return val * val;
+    }
+};
+
+long val = square.apply(10L); // the result is 100L
+</code></pre>
+<p>In this example, we model a math function that squares a given value. This code works perfectly but it is a bit unclear since it contains a lot of extra characters to perform a single line of useful code.</p>
+<p>We won't give you an example of a regular class because it has the same (and even more) disadvantages.</p>
+<p><strong>2) Lambda expressions.</strong> </p>
+<p>A functional interface can also be implemented and instantiated by using a lambda expression.</p>
+<p>Here is a lambda expression that has the same behavior as the anonymous class above:</p>
+<pre><code class="language-java">Func&lt;Long, Long&gt; square = val -&gt; val * val; // the lambda expression
+
+long val = square.apply(10L); // the result is 100L
+</code></pre>
+<p>The type of the functional interface (left) and the type of the lambda (right) are the same from a semantic perspective. Parameters and the result of a lambda expression correspond to the parameters and the result of <strong>a single abstract method </strong>of the functional interface.</p>
+<p></p>
+<div class="alert alert-warning"><p>The code that creates a lambda expression may look as if the object of an interface type is created. As you know, it is impossible. Actually, the Java compiler automatically creates a special intermediate class that implements the functional interface and then creates an object of this class rather than an object of an interface type. The name of such a class may look like <code class="language-java">Functions$$Lambda$14/0x0000000100066840</code> or something similar.</p></div>
+<p></p>
+<p><strong>3) Method references.</strong></p>
+<p>Another way to implement a functional interface is by using method references. In this case, the number and type of arguments and the return type of a method should match the number and types of arguments and the return type of the single abstract method of a functional interface.</p>
+<p>Suppose, there is a method <code class="language-java">square</code> that takes and returns a <code class="language-java">long</code> value:</p>
+<pre><code class="language-java">class Functions {
+
+    public static long square(long val) {
+        return val * val;
+    }
+}</code></pre>
+<p>The argument and the return type of this method fits the <code class="language-java">Func&lt;Long, Long&gt;</code> functional interface. This means we can create a method reference and assign it to an object of the <code class="language-java">Func&lt;Long, Long&gt;</code> type:</p>
+<pre><code class="language-java">Func&lt;Long, Long&gt; square = Functions::square;</code></pre>
+<p>Keep in mind, that the compiler creates an intermediate hidden class that implements the <code class="language-java">Func&lt;Long, Long&gt;</code> interface in a similar way to the case of lambda expressions.</p>
+<p></p>
+<div class="alert alert-primary"><p>Usually, method references are more readable than the corresponding lambda expressions. Try to prefer this way of implementing and instantiating functional interfaces when possible.</p></div>
+<p></p>
+<h5 id="conclusion">Conclusion</h5>
+<p>Here are the key points of this topic:</p>
+<ul><li><p>a functional interface is a special kind of an interface containing a single abstract method, though it can also contain <code class="language-java">static</code> and <code class="language-java">default</code> methods;</p></li><li><p>a functional interface can be implemented and instantiated by a lambda expression or a method reference;</p></li><li><p>Java <a class="theory-lookup not-relevant" href="/learn/step/11636" target="_blank" title="In Java, a compiler is a program that takes Java source code and converts it into bytecode, which is an intermediate representation of the program. | This bytecode is stored in a .class file and can be executed by the Java Virtual Machine (JVM). The compiler is responsible for catching and reporting any compile-time errors in the source code, such as syntax errors or mismatched method declarations. Additionally, modern IDEs often include static code analyzers that work with the compiler to identify potential errors and provide suggestions for improving the code before the compilation process even begins.">compiler</a> automatically creates special hidden classes for lambda expressions and method references;</p></li><li><p>it is possible to use the <code class="language-java">@FunctionalInterface</code> annotation to force checking whether an interface satisfies the requirement of the functional interfaces;</p></li><li><p>in Java, functional programming has been built on top of OOP, especially, interfaces and polymorphism.</p></li></ul>
+</div>

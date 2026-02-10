@@ -1,0 +1,70 @@
+<div class="step-text">
+<p>In the realm of concurrent programming, where multiple threads execute simultaneously, the need to synchronize access to shared resources is crucial for ensuring data integrity and preventing race conditions. Java provides powerful tools for this purpose, such as <code class="language-java">ReentrantLock</code> and <code class="language-java">ReentrantReadWriteLock</code>.</p><h5 id="main-concept">Main concept</h5><p>In concurrent programming, <code class="language-java">ReentrantLock</code> serves as a powerful tool for synchronization. Going beyond the capabilities of the traditional <code class="language-java">synchronized</code> keyword, <code class="language-java">ReentrantLock</code> offers a robust mechanism for controlling access to shared resources.</p><p>Central to its utility is the feature of "reentrancy," which allows a thread to acquire the same lock multiple times. This feature enables safe nested synchronization and helps circumvent deadlocks, thereby enhancing code flexibility. Explicit lock acquisition and release provide fine-grained synchronization, allowing threads to operate concurrently on different sections of the shared resource while maintaining order and integrity.</p><pre><code class="language-java">ReentrantLock reentrantLock = new ReentrantLock();</code></pre><p>While <code class="language-java">ReentrantLock</code> excels in providing exclusive access to critical sections, <code class="language-java">ReentrantReadWriteLock</code> takes synchronization a step further. It recognizes that not all thread interactions require the same level of exclusivity. By implementing the <code class="language-java">ReadWriteLock</code> interface, <code class="language-java">ReentrantReadWriteLock</code> allows multiple threads to read a shared resource concurrently while permitting only one thread to write to the resource at any given time. This lock is particularly useful for improving concurrency and performance in situations where there are more reader threads than writer threads. Additionally, you have the option of using <code class="language-java">ReentrantLock</code> for other synchronization needs.</p><pre><code class="language-java">ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();</code></pre><p>Dividing locks into read and write locks is an important concept in multithreaded programming, especially when working with data that is frequently read but rarely updated. Consider a situation where you have a data structure that serves as a cache. If you use full synchronization through the <code class="language-java">synchronized</code> keyword, only one thread can read or write the data at any given moment. This can lead to significant delays, especially when you have many threads that frequently read the data. </p><p>Now let's consider the same situation, but using <code class="language-java">ReentrantReadWriteLock</code>. In this case, if a thread wants to write data, it acquires the write lock. During this time, no other thread can read or write data. However, if a thread wants to read data, it acquires the read lock. If another thread also wants to read data, it can likewise acquire the read lock, even if it's already held by another thread. This allows multiple threads to read data simultaneously, greatly improving performance in scenarios where read operations are much more frequent than write operations.</p><h5 id="fair-or-non-fair-threads">Fair or non-fair threads</h5><p>The <code class="language-java">ReentrantLock</code> class provides a constructor with a single boolean parameter, commonly referred to as the "fair flag." This flag determines whether the lock should operate in a fair or non-fair mode.</p><ul><li><p><code class="language-java">fair=true</code>: When you instantiate a <code class="language-java">ReentrantLock</code> constructor with this flag set to <code class="language-java">true</code>, the lock operates in fair mode. In this mode, when multiple threads are waiting to acquire the lock, they are granted access in the order in which they requested it. Fair mode can be useful in scenarios where you want to ensure that threads do not experience indefinite waits and are given an opportunity to acquire the lock in a first-come, first-served manner.</p></li><li><p><code class="language-java">fair=false(default)</code>: When you create a <code class="language-java">ReentrantLock</code> with the fair flag set to <code class="language-java">false</code>, the lock operates in non-fair mode. In this mode, there is no guaranteed order for thread access; threads are allowed to acquire the lock in a more arbitrary manner. This could potentially lead to some threads experiencing longer waits or being disproportionately favored. Non-fair mode can offer better performance and throughput compared to fair mode, but it may result in less predictable and equitable thread scheduling.</p></li></ul><pre><code class="language-java">import java.util.concurrent.locks.ReentrantLock;
+
+public class FairnessExample {
+    public static void main(String[] args) {
+        ReentrantLock fairLock = new ReentrantLock(true); // Creating a fair lock
+        ReentrantLock nonFairLock = new ReentrantLock(); // Creating a non-fair lock
+
+        ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock(true);
+        ReentrantReadWriteLock reentrantReadWriteLock = new ReentrantReadWriteLock();
+    }
+}</code></pre><h5 id="methods-of-class">Methods of class</h5><p>The <code class="language-java">ReentrantLock</code> class provides methods for acquiring the lock and attempting to acquire the lock without blocking.</p><ul><li><p><code class="language-java">lock()</code>: Acquires the lock, blocking the current thread if the lock is not available. This method should be used within a <code class="language-java">try</code> block to ensure proper unlocking in a <code class="language-java">finally</code> block.</p></li><li><p><code class="language-java">tryLock()</code>: Attempts to acquire the lock without blocking. Returns <code class="language-java">true</code> if the lock was successfully acquired, and <code class="language-java">false</code> otherwise. This is useful when you wish to try acquiring a lock and proceed with an alternative action if the lock isn't immediately available.</p></li><li><p><code class="language-java">unlock()</code>: Releases the lock that was previously acquired by a thread using the <code class="language-java">lock()</code> method.</p></li><li><p><code class="language-java">getHoldCount()</code>: Queries the number of holds on this lock by the current thread. A thread has a hold on a lock for each <code class="language-java">lock()</code> or <code class="language-java">lockInterruptibly()</code> action that is not balanced by an <code class="language-java">unlock()</code> action</p></li><li><p><code class="language-java">getQueueLength()</code> : Returns the number of threads waiting to acquire the lock. </p></li></ul><p>A recommended practice when using locks is to enclose the <code class="language-java">lock()</code> call in a <code class="language-java">try</code> block and the <code class="language-java">unlock()</code> call in a corresponding <code class="language-java">finally</code> block. This ensures that the lock is always released, even if an exception occurs within the critical section. The <code class="language-java">unlock()</code> call in the <code class="language-java">finally</code> block ensures proper resource management and prevents deadlocks.</p><pre><code class="language-java">ReentrantLock lock = new ReentrantLock();
+lock.lock();  // Acquire the lock (within a try block)
+try {
+    // Critical section
+} finally {
+    lock.unlock();  // Release the lock (within a finally block)
+}</code></pre><p>You can also use <code class="language-java">tryLock()</code> to attempt to acquire a lock without blocking the current thread:</p><pre><code class="language-java">if (lock.tryLock()) {
+    try {
+        // Critical section
+    } finally {
+        lock.unlock();
+    }
+} else {
+    // Handle alternative action if lock is not available
+}</code></pre><p><code class="language-java">ReentrantReadWriteLock</code> offers the same methods as <code class="language-java">ReentrantLock</code>, but also includes additional methods:</p><ul><li><p><code class="language-java">readLock()</code>: Acts as a special pass allowing multiple threads to read a shared resource simultaneously. When a thread holds the <code class="language-java">readLock</code>, it indicates that it's only reading and not modifying the resource.</p></li><li><p><code class="language-java">writeLock()</code>: Is reserved for exclusive purposes. It's akin to being granted the role of the author, who can add, modify, or rewrite the content of a book. Only one thread at a time is allowed to hold the <code class="language-java">writeLock</code>.</p></li><li><p><code class="language-java">getReadLockCount()</code>: Returns the number of read locks held. This includes not just the count of threads that have acquired the read lock, but also the total count of these acquisitions. A single thread can acquire the read lock multiple times, and each acquisition is counted.</p></li><li><p><code class="language-java">getWriteHoldCount()</code>: Queries the number of reentrant write holds on this lock by the current thread. A writer thread has a hold on a lock for each lock action that is not matched by an unlock action.</p></li></ul><pre><code class="language-java">ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
+ReentrantLock readLock = rwLock.readLock();
+ReentrantLock writeLock = rwLock.writeLock();</code></pre><p>If a thread has acquired the <code class="language-java">writeLock</code>, no other thread can acquire either it or the <code class="language-java">readLock</code> until the <code class="language-java">writeLock</code> is released. This is because only one thread at a time is permitted to hold the <code class="language-java">writeLock</code>.</p><p>On the other hand, if a thread has acquired the <code class="language-java">readLock</code>, other threads can still acquire the <code class="language-java">readLock</code>, even while it is held by the first thread. However, no thread can acquire the <code class="language-java">writeLock</code> until all instances of the <code class="language-java">readLock</code> have been released. This enables multiple threads to read data simultaneously while ensuring that writes are exclusive.</p><h5 id="example-of-usage">Example of usage</h5><p>We will show an example that demonstrates the concept of lock reentrancy in <code class="language-java">ReentrantLock</code> and <code class="language-java">ReentrantReadWriteLock</code>. In practice, recursive locking should be used with caution to avoid potential deadlocks or unnecessary complexity in your code.</p><pre><code class="language-java">public class RecursiveLockExample {
+    private static final Lock lock = new ReentrantLock();
+
+    public static void main(String[] args) {
+        recursiveMethod(5);
+    }
+
+    private static void recursiveMethod(int count) {
+        lock.lock();
+        try {
+            if (count &gt; 0) {
+                System.out.println("Count: " + count);
+                recursiveMethod(count - 1); // Recursive call
+            }
+        } finally {
+            lock.unlock();
+        }
+    }
+}</code></pre><p>In this example, the <code class="language-java">recursiveMethod</code> acquires the lock before performing its operations and then releases the lock in a <code class="language-java">finally</code> block. The method calls itself recursively while holding the lock. </p><p>Next, we'll show an example involving <code class="language-java">ReentrantReadWriteLock</code>:</p><pre><code class="language-java">import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+public class Cache {
+    private Map&lt;String, String&gt; cache = new HashMap&lt;&gt;();
+    private ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
+
+    public String readFromCache(String key) {
+        lock.readLock().lock();
+        try {
+            return cache.get(key);
+        } finally {
+            lock.readLock().unlock();
+        }
+    }
+
+    public void writeToCache(String key, String value) {
+        lock.writeLock().lock();
+        try {
+            cache.put(key, value);
+        } finally {
+            lock.writeLock().unlock();
+        }
+    }
+}</code></pre><p>In this example, the <code class="language-java">readFromCache</code> method acquires the read lock before accessing the cache. This allows multiple threads to read from the cache simultaneously. The <code class="language-java">writeToCache</code> method acquires the write lock before modifying the cache. This ensures that no other threads can read or write while the cache is being updated.</p><h5 id="conclusion">Conclusion</h5><p>Both <code class="language-java">ReentrantLock</code> and <code class="language-java">ReentrantReadWriteLock</code> offer the valuable feature of "fairness", allowing threads to acquire locks in the order in which they were requested. These locks provide essential methods such as <code class="language-java">lock</code>, <code class="language-java">unlock</code>, and <code class="language-java">tryLock</code>, to ensure precise control over concurrent access to shared resources. Moreover, <code class="language-java">ReentrantReadWriteLock</code> extends this functionality by introducing the <code class="language-java">readLock()</code> and <code class="language-java">writeLock()</code> methods, adeptly catering to scenarios where a balance between reading and writing operations is crucial. As a best practice for maintaining synchronization integrity, the tried-and-true approach of using try-finally blocks comes highly recommended, to ensure that locks are consistently and responsibly released.</p>
+</div>

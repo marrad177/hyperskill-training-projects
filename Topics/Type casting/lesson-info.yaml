@@ -1,0 +1,8 @@
+content:
+  - Type casting
+  - Penny for your euros
+  - Widening casting
+  - Possible implicit castings
+  - Rounding down a halved float value to an integer
+  - Converting and printing double values as integers
+  - Casting long to byte with intermediate int

@@ -1,0 +1,10 @@
+type: code
+custom_name: Template Method
+files:
+  - name: src/Main.java
+    visible: true
+    learner_created: false
+feedback_link: https://hyperskill.org/learn/step/5203#comment
+status: Solved
+record: -1
+submission_language: java17

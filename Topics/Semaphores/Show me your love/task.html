@@ -1,0 +1,22 @@
+<div class="step-text">
+<p></p>
+<p>Imagine you have created a class called <code class="language-java">Mouth</code>. Its sole purpose is to say one <strong>true </strong>and <strong>correct </strong>statement. </p>
+<pre><code class="language-java">public class Mouth {
+    public void first() {
+        System.out.print("I ");
+    }
+
+    public void second() {
+        System.out.print("love ");
+    }
+
+    public void third() {
+        System.out.print("programming");
+    }
+}</code></pre>
+<p>The same instance of <code class="language-java">Mouth</code> will be passed to three different threads. Thread A will call <code class="language-java">first()</code>, thread B will call <code class="language-java">second()</code>, and thread C will call <code class="language-java">third()</code>. Design a mechanism and modify the program to ensure that <code class="language-java">second()</code> is executed after <code class="language-java">first()</code>, and <code class="language-java">third()</code> is executed after <code class="language-java">second()</code>.</p>
+<p>The <strong>input </strong>format is space-separated letters A, B, and C, like:</p>
+<p><samp>input = A C B</samp></p>
+<p>There are three threads being fired asynchronously. The input <code class="language-java">A C B</code> means thread A calls <code class="language-java">first()</code>, then thread C calls <code class="language-java">third()</code>, and lastly thread B calls <code class="language-java">second()</code>. However, the program should still print "I love programming!", which is the correct output.</p>
+<p></p><div class="alert alert-primary"> You don't know how the threads will be scheduled in the operating system, even though the numbers in the input seem to imply the ordering. The input format you see is mainly to ensure the comprehensiveness of our tests. </div><br><b>Sample Input:</b><br><pre><code class="language-no-highlight">A B C</code></pre><br><b>Sample Output:</b><br><pre><code class="language-no-highlight">I love programming!</code></pre><br><br><b>Sample Input:</b><br><pre><code class="language-no-highlight">A C B</code></pre><br><b>Sample Output:</b><br><pre><code class="language-no-highlight">I love programming!</code></pre><br><br><br><font color="gray">Memory limit: 256 MB</font><br><font color="gray">Time limit: 5 seconds</font><br><br>
+</div>

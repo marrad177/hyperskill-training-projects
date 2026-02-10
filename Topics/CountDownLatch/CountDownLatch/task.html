@@ -1,0 +1,335 @@
+<div class="step-text">
+<p>In multi-threaded programming, a prevalent challenge is managing dependencies between threads, explicitly ensuring that a particular thread doesn't proceed until specific other threads have completed their tasks. The inherent complexity arises from the independent nature of thread execution, where each thread typically completes its tasks at its own pace and in an unpredictable order. Java provides a suite of synchronization mechanisms to effectively manage these inter-thread dependencies, including <a class="theory-lookup not-relevant" href="/learn/step/36167" target="_blank" title="In Java, a synchronized block is a section of code within a method that is synchronized for thread safety. | It uses the `synchronized` keyword, followed by the object that will be used as the lock, and then the code block to be synchronized. Only one thread can execute the code in a synchronized block at a time, ensuring that concurrent access to shared resources is controlled and that no two threads can modify the shared data simultaneously. This is useful when you want to synchronize only a specific part of a method, rather than the entire method.">synchronized blocks</a>, locks, and semaphores. These tools offer diverse ways to coordinate the execution of threads, enabling more controlled and predictable multi-threaded behavior.</p>
+<h5 id="mechanism">Mechanism</h5>
+<p>In multi-threaded programming, we often encounter scenarios where the execution of specific threads depends on other threads' completion of tasks. Here are some typical situations:</p>
+<ul>
+<li><strong>Single thread dependency.</strong> Imagine a "DataLoader" thread responsible for loading data from a file. Multiple "DataProcessor" threads are awaiting the data load completion to initiate their processing.</li>
+<li><strong>Multiple thread dependency.</strong> Consider a scenario where we're searching for the maximum value in a large array of numbers. The task is divided among a group of worker threads, each searching a segment of the array. Another thread awaits the completion of all worker threads to aggregate and process the results.</li>
+<li><strong>Operation Count Dependency.</strong> Picture a server capable of handling a fixed number of requests simultaneously. The server thread needs to wait not for a group of threads but for an operation to be completed a specific number of times.</li>
+</ul>
+<p>Handling these cases requires a robust synchronization mechanism, and that's where <code class="language-java">CountDownLatch</code> comes into play. The core concept of <code class="language-java">CountDownLatch</code> is to provide a synchronization aid that allows one or more threads to wait until a set of operations performed in other threads completes. This mechanism ensures that specific tasks are completed before others proceed, thereby effectively coordinating the execution of multiple threads.</p>
+<p>The operational principle of <code class="language-java">CountDownLatch</code> hinges on a count-based mechanism. The latch is initialized with a specific count, representing the number of tasks to be completed or threads to finish. As each task concludes, the respective thread invokes the <code class="language-java">countDown()</code> method on the latch, decrementing the count. Threads that are dependent on the completion of these tasks call the <code class="language-java">await()</code> method. This call blocks the execution of the dependent threads until the count reaches zero.</p>
+<p>A critical aspect of <code class="language-java">CountDownLatch</code> is its irreversibility: once the count reaches zero, it can't be reset. This characteristic makes it particularly useful for "one-off" synchronization scenarios where the count isn't expected to change during the program's execution. By employing <code class="language-java">CountDownLatch</code>, developers can effectively orchestrate the execution of threads, ensuring that crucial code sections are executed in a specific sequence or that certain prerequisites are fulfilled before proceeding.</p>
+<h5 id="api">API</h5>
+<p>The <code class="language-java">CountDownLatch</code> class in Java is a synchronization utility that uses a countdown mechanism to enable threads to wait for specific operations to complete. The key components of <code class="language-java">CountDownLatch</code> are its constructor and several methods:</p>
+<p>Here's the <strong>constructor</strong>:</p>
+<ul>
+<li><code class="language-java">CountDownLatch(int count)</code>: this constructor initializes a new <code class="language-java">CountDownLatch</code> instance with a specified count.
+
+	<pre><code class="language-java">import java.util.concurrent.CountDownLatch;
+...
+CountDownLatch latch = new CountDownLatch(1);</code></pre>
+</li>
+</ul>
+<p>And here are the <strong>methods</strong>:</p>
+<ul>
+<li><code class="language-java">void await() throws InterruptedException</code>: causes the calling thread to wait until the latch's count reaches zero. It's important to note that this is a blocking call, causing the thread to wait indefinitely until the count reaches zero.</li>
+<li><code class="language-java">boolean await(long timeout, TimeUnit unit) throws InterruptedException</code>: also causes the calling thread to wait until the latch's count reaches zero, but only up to the specified waiting time.
+	<pre><code class="language-java">import java.util.concurrent.TimeUnit;
+...
+latch.await();  // blocking call
+latch.await(600, TimeUnit.SECONDS);</code></pre>
+</li>
+<li><code class="language-java">void countDown()</code>: decrements the count of the latch, releasing all waiting threads if the count reaches zero.</li>
+<li><code class="language-java">long getCount()</code>: returns the current count.</li>
+<li><code class="language-java">String toString()</code>: returns a string identifying this latch, along with its state. The state includes the string "Count =" followed by the current count.
+	<pre><code class="language-java">latch.countDown(); // count down from 1 to 0
+latch.getCount(); // 0
+latch.toString(); // java.util.concurrent.CountDownLatch@65ab7765[Count = 0]</code></pre>
+</li>
+</ul>
+<p>It's crucial to remember that <code class="language-java">CountDownLatch</code> is a one-time synchronization aid: once the count reaches zero, it can't be reset. If you require a reusable synchronization aid, consider using <code class="language-java">CyclicBarrier</code> or <code class="language-java">Semaphore</code>.</p>
+<h5 id="use-cases">Use cases</h5>
+<p>Let's refine the recap of the use cases for <code class="language-java">CountDownLatch</code>.</p>
+<ul>
+<li><strong>Coordinating thread startup</strong>: in a system where multiple threads need to perform initialization tasks before the main processing, <code class="language-java">CountDownLatch</code> can be employed to ensure all threads complete their initialization before the system proceeds further.</li>
+<li><strong>Managing parallel tasks</strong>: when a set of tasks are to be executed concurrently by multiple threads, and it's necessary to wait for all tasks to complete before moving forward, <code class="language-java">CountDownLatch</code> serves as a synchronization tool to manage these threads.</li>
+<li><strong>Testing multi-threaded code</strong>: <code class="language-java">CountDownLatch</code> is a valuable tool in testing scenarios involving multi-threaded code. It enables the simulation of <a class="theory-lookup not-relevant" href="/learn/step/36167" target="_blank" title="In Java, a critical section is a region of code that accesses shared resources and should not be executed by more than one thread at the same time. | Shared resources can be variables, files, input/output ports, databases, or other types of resources. For example, if a class has a static field named two thread increment, and two threads increment it, sometimes a thread may see an intermediate value of the non-atomic operation. This is a visibility and atomicity problem that can occur while working with shared data. To prevent this, Java provides a mechanism called thread synchronization. Each object in Java has an associated implicit monitor that controls concurrent access to the object. A thread can acquire a monitor, and while it holds the monitor, other threads cannot acquire it. They will wait until the owner (the thread that acquired the monitor) releases it. This mechanism allows programmers to protect critical sections from being accessed by multiple threads concurrently.">critical sections</a> and ensures that the code under test behaves as expected under these conditions.</li>
+<li><strong>Synchronization in producer-consumer scenarios</strong>: in scenarios involving multiple producer threads generating data and multiple consumer threads processing it, <code class="language-java">CountDownLatch</code> can ensure all producers have completed their tasks before the consumers begin processing.</li>
+<li><strong>Parallel computation and aggregation</strong>: for tasks that can be divided into parallel executable subtasks, <code class="language-java">CountDownLatch</code> can be used to ensure all subtasks are complete before the results are aggregated. This synchronization is crucial in scenarios where the final result depends on the completion of all subtasks.</li>
+</ul>
+<p>In the following sections, we'll illustrate the practical use of <code class="language-java">CountDownLatch</code> through code examples representing common scenarios in multi-threaded programming.</p>
+<h5 id="single-thread-dependency-example">Single thread dependency example</h5>
+<p>Consider a situation where a "DataLoader" thread is tasked with loading data from a file. Meanwhile, several "DataProcessor" threads are poised to process this data. However, they must wait until the <code class="language-java">DataLoader</code> has fully loaded the data before commencing their operations.</p>
+<p>You have a <code class="language-java">Data</code> class:</p>
+<pre><code class="language-java">class SharedData {
+    private String data;
+
+    void load(String data) {
+        this.data = data;
+    }
+
+    String get() {
+        return data;
+    }
+}</code></pre>
+<p>In this scenario, we have two types of threads. The first type, represented by <code class="language-java">dataLoaderThread</code>, performs the task of loading data:</p>
+<pre><code class="language-java">class WorkerDataLoader implements Runnable {
+    private final SharedData data;
+    private final CountDownLatch latch;
+    
+    WorkerDataLoader(SharedData data, CountDownLatch latch) {
+        this.data = data;
+        this.latch = latch;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("DataLoader is loading data...");
+        try {
+            Thread.sleep(3000); // Simulating time taken to load data
+            data.load("Loaded Data");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("DataLoader has completed loading data.");
+        latch.countDown();
+    }
+}</code></pre>
+<p>The second type of thread in this scenario is <code class="language-java">dataProcessorThread</code>. These threads are responsible for processing the data that the <code class="language-java">DataLoader</code> thread loads:</p>
+<pre><code class="language-java">class WorkerDataProcessor implements Runnable {
+    private final SharedData data;
+    private final CountDownLatch latch;
+
+    public WorkerDataProcessor(SharedData data, CountDownLatch latch) {
+        this.data = data;
+        this.latch = latch;
+    }
+
+    @Override
+    public void run() {
+        try {
+            System.out.println("DataProcessor is waiting for data to be loaded...");
+            latch.await();
+            System.out.println("DataProcessor has received data: " + data.get());
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+<p>The main class, <code class="language-java">DataLoaderProcessorExample</code>, orchestrates the execution of the <code class="language-java">DataLoader</code> and <code class="language-java">DataProcessor</code> threads:</p>
+<pre><code class="language-java">public class DataLoaderProcessorExample {
+    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(1);
+        SharedData data = new SharedData();
+        Thread[] dataProcessorThreads = new Thread[3];
+        for (int i = 0; i &lt; dataProcessorThreads.length; i++) {
+            dataProcessorThreads[i] = new Thread(new WorkerDataProcessor(data, latch));
+            dataProcessorThreads[i].start();
+        }
+        Thread dataLoaderThread = new Thread(new WorkerDataLoader(data, latch));
+        dataLoaderThread.start();
+        dataLoaderThread.join();
+        for (Thread thread : dataProcessorThreads) {
+            thread.join();
+        }
+    }
+}</code></pre>
+<p>In this code, the <code class="language-java">DataLoader</code> thread emulates the task of data loading by sleeping for 3 seconds. Upon data loading completion, it invokes <code class="language-java">countDown()</code> on <code class="language-java">CountDownLatch</code>, decrementing the counter.</p>
+<p>Simultaneously, the <code class="language-java">DataProcessor</code> threads invoke <code class="language-java">await()</code> on the <code class="language-java">CountDownLatch</code>, causing them to pause execution until the counter reaches zero. Once the <code class="language-java">DataLoader</code> thread completes data loading (signaled by the counter reaching zero), the <code class="language-java">DataProcessor</code> threads are unblocked and proceed with data processing.</p>
+<h5 id="multiple-thread-dependency-example">Multiple thread dependency example</h5>
+<p>Let's say we're searching through a large array of numbers for the maximum value, and we want to do this in parallel by having each worker thread search through a part of the array.</p>
+<p>Here is our worker thread:</p>
+<pre><code class="language-java">class Worker implements Runnable {
+    private final CountDownLatch latch;
+    private final int[] numbers;
+    private final int start;
+    private final int end;
+    private final AtomicInteger globalMax;
+
+    public Worker(CountDownLatch latch, int[] numbers, int start, int end, AtomicInteger globalMax) {
+        this.latch = latch;
+        this.numbers = numbers;
+        this.start = start;
+        this.end = end;
+        this.globalMax = globalMax;
+    }
+
+    @Override
+    public void run() {
+        int localMax = Integer.MIN_VALUE;
+        for (int j = start; j &lt; end; j++) {
+            localMax = Math.max(localMax, numbers[j]);
+        }
+
+        // update global max
+        int currentGlobalMax;
+        do {
+            currentGlobalMax = globalMax.get();
+            if (localMax &lt;= currentGlobalMax) {
+                break;
+            }
+        } while (!globalMax.compareAndSet(currentGlobalMax, localMax));
+
+        latch.countDown();
+    }
+}</code></pre>
+<p>The main class, <code class="language-java">ParallelSearchExample</code>, orchestrates the execution of the worker threads:</p>
+<pre><code class="language-java">public class ParallelSearchExample {
+
+    private static final int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+    private static final int NUM_THREADS = 4;
+
+    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(NUM_THREADS);
+        AtomicInteger globalMax = new AtomicInteger(Integer.MIN_VALUE);
+
+        int segmentSize = numbers.length / NUM_THREADS;
+
+        for (int i = 0; i &lt; NUM_THREADS; i++) {
+            int start = i * segmentSize;
+            int end = (i + 1) * segmentSize;
+            if (i == NUM_THREADS - 1) { // last segment should go to the end of the array
+                end = numbers.length;
+            }
+            Thread worker = new Thread(new Worker(latch, numbers, start, end, globalMax));
+            worker.start();
+        }
+
+        latch.await(); // wait for all workers to finish
+
+        System.out.println("Maximum number is " + globalMax.get());
+    }
+}
+</code></pre>
+<p>In this example, we divide the array into segments and assign each segment to a worker thread. Each worker finds the maximum in its segment and then updates a global maximum if its local maximum is larger. We use an <code class="language-java">AtomicInteger</code> for the global maximum to ensure that the update is <a class="theory-lookup not-relevant" href="/learn/step/36167" target="_blank" title="In Java, thread-safety refers to the ability of a program to function correctly when accessed by multiple threads concurrently. | When shared data is accessed by multiple threads, there can be issues related to visibility and atomicity. To address these issues, Java provides the concept of a monitor, which is a special mechanism that controls concurrent access to an object. Each object in Java has an associated implicit monitor, and a thread can acquire a monitor, preventing other threads from acquiring it until the owner releases it. When it comes to collections, classic collections like ArrayList, HashMap, and HashSet are not thread-safe, which means that they do not provide thread-safety guarantees. As a result, when multiple threads access and modify these collections concurrently, it can lead to problems such as data inconsistency or runtime exceptions. To address this, Java provides synchronized collections like Vector, Hashtable, and Collections.synchronizedList, which are thread-safe but have lower performance.">thread-safe</a>. The master thread (the main thread in this case) waits for all workers to finish by calling <code class="language-java">await()</code> on <code class="language-java">CountDownLatch</code>. Once all workers finish and the latch count reaches zero, the master thread prints out the global maximum.</p>
+<h5 id="operation-count-dependency-example">Operation count dependency example</h5>
+<p>In this example, a server thread waits for all requests to be completed before proceeding. A separate thread processes each request, and once a request is completed, it calls <code class="language-java">countDown()</code> on the <code class="language-java">CountDownLatch</code>, decrementing the count. The server thread calls <code class="language-java">await()</code> on the <code class="language-java">CountDownLatch</code>, causing it to block until the count reaches zero:</p>
+<pre><code class="language-java">class WorkerServerThread implements Runnable {
+    private final CountDownLatch latch;
+
+    public WorkerServerThread(CountDownLatch latch) {
+        this.latch = latch;
+    }
+
+    @Override
+    public void run() {
+        try {
+            System.out.println("Server is waiting for all requests to be completed...");
+            latch.await();
+            System.out.println("All requests are completed. Server can now proceed to the next batch.");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+<p>Once all requests are completed and the count reaches zero, the server thread is released from its blocking state and can proceed to the next batch of requests.</p>
+<pre><code class="language-java">class WorkerRequestThread implements Runnable {
+    private final CountDownLatch latch;
+
+    public WorkerRequestThread(CountDownLatch latch) {
+        this.latch = latch;
+    }
+
+    @Override
+    public void run() {
+        try {
+            System.out.println("Request " + Thread.currentThread().getName() + " is being processed.");
+            Thread.sleep(2000); // Simulating time taken to process the request
+            System.out.println("Request " + Thread.currentThread().getName() + " is completed.");
+            latch.countDown();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+<p>The main class, <code class="language-java">ServerExample</code>, orchestrates the execution of the server and request threads:</p>
+<pre><code class="language-java">public class ServerExample {
+    private static final int MAX_REQUESTS = 5;
+
+    public static void main(String[] args) throws InterruptedException {
+        CountDownLatch latch = new CountDownLatch(MAX_REQUESTS);
+        Thread[] requestThreads = new Thread[MAX_REQUESTS];
+        for (int i = 0; i &lt; requestThreads.length; i++) {
+            requestThreads[i] = new Thread(new WorkerRequestThread(latch));
+            requestThreads[i].start();
+        }
+        Thread serverThread = new Thread(new WorkerServerThread(latch));
+        serverThread.start();
+        serverThread.join();
+        for (Thread thread : requestThreads) {
+            thread.join();
+        }
+    }
+}
+</code></pre>
+<h5 id="code-testing-example">Code testing example</h5>
+<p><code class="language-java">CountDownLatch</code> is also often used in testing multi-threaded code. It allows you to emulate critical sections and ensure that the code tested successfully overcomes them. For example, you might have a test that spawns multiple threads, and you want to ensure that all of these threads complete a particular task before the test proceeds. </p>
+<pre><code class="language-java">class Counter {
+    private int value = 0;
+
+    synchronized void increment() {
+        value++;
+    }
+
+    synchronized int getValue() {
+        return value;
+    }
+}</code></pre>
+<p>Here is our task:</p>
+<pre><code class="language-java">class CountingTask implements Runnable {
+    private final Counter counter;
+    private final CountDownLatch doneSignal;
+
+    CountingTask(Counter counter, CountDownLatch doneSignal) {
+        this.counter = counter;
+        this.doneSignal = doneSignal;
+    }
+
+    public void run() {
+        counter.increment();
+        doneSignal.countDown();
+    }
+}</code></pre>
+<p>By using <code class="language-java">CountDownLatch</code>, you can make the test wait until all threads have completed the task, ensuring that your test only proceeds when the multi-threaded part of your code has completed its work.</p>
+<pre><code class="language-java">public class TestingExample {
+    @Test
+    public void testMultiThreadedCode() throws InterruptedException {
+        int numberOfThreads = 3;
+        CountDownLatch doneSignal = new CountDownLatch(numberOfThreads);
+        Counter counter = new Counter();
+
+        for (int i = 0; i &lt; numberOfThreads; ++i) {
+            new Thread(new CountingTask(counter, doneSignal)).start();
+        }
+
+        doneSignal.await();
+        assertEquals(numberOfThreads, counter.getValue());
+    }
+}
+</code></pre>
+<h5 id="countdownlatch-vs-semaphore">CountDownLatch vs. Semaphore</h5>
+<p><code class="language-java">CountDownLatch</code> and <code class="language-java">Semaphore</code> are both synchronization aids in Java that can be used to control and manage thread execution, but they are used for different purposes.</p>
+<ul>
+<li><strong>CountDownLatch</strong></li>
+</ul>
+<p>A <code class="language-java">CountDownLatch</code> is used when one thread (or a set of threads) needs to wait for one or more other threads to complete their tasks before it can continue. The latch is initialized with a count, and the <code class="language-java">await()</code> method will block until the count reaches zero. Other threads can decrease the count by calling the <code class="language-java">countDown()</code> method. Once the count reaches zero, all calls to <code class="language-java">await()</code> return immediately. Note that the count can't be reset. Once it reaches zero, the <code class="language-java">CountDownLatch</code> can't be used anymore.</p>
+<ul>
+<li><strong>Semaphore</strong></li>
+</ul>
+<p>On the other hand, a <code class="language-java">Semaphore</code> is used to control access to a shared resource. It maintains a set of permits, and threads can acquire permits (if available) to access the shared resource. When a thread is done with the resource, it releases the permit. If no permits are available, the <code class="language-java">acquire()</code> method will block until a permit becomes available. Unlike <code class="language-java">CountDownLatch</code>, a <code class="language-java">Semaphore</code> can be used repeatedly. When a permit is released, it goes back into the pool and can be acquired by another thread.</p>
+<ul>
+<li><strong>CyclicBarrier</strong></li>
+</ul>
+<p>A <code class="language-java">CyclicBarrier</code> is similar to a <code class="language-java">CountDownLatch</code>, but it's used when a group of threads must reach a common barrier point before continuing. When a thread reaches the barrier point (by calling <code class="language-java">await()</code>), it blocks until all other threads reach the barrier point. Once all threads have reached the barrier point, they can all continue. Unlike <code class="language-java">CountDownLatch</code>, <code class="language-java">CyclicBarrier</code> can be reused after all threads have passed the barrier.</p>
+<p>So, when to use which?</p>
+<ul>
+<li>
+<p>Use <code class="language-java">CountDownLatch</code> when you must ensure that one or more threads wait for other threads to complete their tasks. It's a synchronization aid that allows one or more threads to wait until a set of operations being performed in other threads is complete.</p>
+</li>
+<li>
+<p>Use <code class="language-java">Semaphore</code> when you need to control access to a shared resource, especially when the resource has a limit to how many threads can access it simultaneously. It mainly protects an expensive or critical resource by limiting the number of threads that can access it concurrently.</p>
+</li>
+<li>
+<p>Use <code class="language-java">CyclicBarrier</code> when you have a group of threads that must all wait for each other to reach a common barrier point. This is often used in parallel algorithms that involve divide-and-conquer strategies, where an algorithm is broken into sub-parts that are solved in parallel. The solutions are combined only when all parts have been solved.</p>
+</li>
+</ul>
+<p>Remember that the choice between <code class="language-java">CountDownLatch</code> and <code class="language-java">Semaphore</code> depends on the specifics of your problem. Always analyze your situation thoroughly and understand the semantics of these classes before deciding which to use.</p>
+<h5 id="conclusion">Conclusion</h5>
+<p>Here's a quick recap of what you learned in this topic:</p>
+<ul>
+<li>The <code class="language-java">CountDownLatch</code> class in Java is a powerful concurrency utility that enables synchronization between multiple threads. It allows one or more threads to wait until a set of operations in other threads completes, providing a simple yet effective mechanism for managing inter-thread dependencies.</li>
+<li>The <code class="language-java">CountDownLatch</code> constructor initializes a new instance with a specified count. It uses <code class="language-java">countDown()</code> and <code class="language-java">await()</code> methods for controlling threads.</li>
+<li>The choice between <code class="language-java">CountDownLatch</code>, <code class="language-java">CyclicBarrier</code> and <code class="language-java">Semaphore</code> depends on the specific problem you're trying to solve. Always ensure you understand your scenario well and choose the appropriate tool for the job.</li>
+</ul>
+</div>

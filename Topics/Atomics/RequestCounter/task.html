@@ -1,0 +1,9 @@
+<div class="step-text">
+<p></p>
+<p>You are working on a high-performance server application that handles a large number of concurrent requests. One of the requirements of this application is to count the number of requests that have been processed. However, you have noticed that the counter you have implemented is not thread-safe and sometimes produces incorrect results. You have learned about the Atomic classes and decide to use them to implement a thread-safe counter.</p>
+<p>Implement a Java class called <code class="java">RequestCounter</code> that uses an <code class="java">AtomicInteger</code> to count the number of requests that have been processed. The class should have the following methods:</p>
+<ul>
+<li><code class="java">void increment()</code>: atomically increments the counter.</li>
+<li><code class="java">int getCount()</code>: atomically gets the current value of the counter.</li>
+</ul><br><b>Sample Input:</b><br><pre><code class="language-no-highlight">5</code></pre><br><b>Sample Output:</b><br><pre><code class="language-no-highlight">5</code></pre><br><br><b>Sample Input:</b><br><pre><code class="language-no-highlight">10</code></pre><br><b>Sample Output:</b><br><pre><code class="language-no-highlight">10</code></pre><br><br><b>Sample Input:</b><br><pre><code class="language-no-highlight">100</code></pre><br><b>Sample Output:</b><br><pre><code class="language-no-highlight">100</code></pre><br><br><br><font color="gray">Memory limit: 256 MB</font><br><font color="gray">Time limit: 5 seconds</font><br><br>
+</div>

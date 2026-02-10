@@ -1,0 +1,6 @@
+content:
+  - States of a thread
+  - Runnable state
+  - Print name of TERMINATED thread
+  - The current state of a thread
+  - A thread in NEW state

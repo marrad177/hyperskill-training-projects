@@ -1,0 +1,99 @@
+<div class="step-text">
+<p>In many aspects of life, we find ourselves in situations where there is a great deal of demand for something, but only so much is available. Take the example of a mall parking lot. During Black Friday, the parking lot is fully packed before you can blink twice, and now you are wandering around without a place to park in sight. Working with concurrent processes is no different from this, but instead of cars, we have threads. </p>
+<p>In this topic, we will look at the <code class="language-java">Semaphore</code> class, which was designed to aid us in effectively controlling shared resources.</p>
+<h5 id="initializing">Initializing</h5>
+<p>A <code class="language-java">Semaphore</code> object can best be described as a lock with a counter. We can create a <code class="language-java">Semaphore</code> by passing the number of <strong>permits </strong>as an argument. A permit<strong> </strong>is required whenever a thread wants to access a resource guarded by the <code class="language-java">Semaphore</code>. So, this counter determines the maximum number of threads that can gain entry simultaneously.</p>
+<pre><code class="language-java">// Create a Semaphore with two permits to issue.
+Semaphore semaphore = new Semaphore(2);
+</code></pre>
+<p>The Java API also allows us to define a semaphore's <strong>fairness</strong> by setting the <strong>fair flag </strong>of the constructor. The newly initialized <code class="language-java">Semaphore</code> will then work on a <strong>FIFO </strong>(first in, first out)<strong> </strong>basis. The following access will be granted to the thread in the queue that has been blocked for the longest time.</p>
+<pre><code class="language-java">Semaphore fairSemaphore = new Semaphore(2, true);
+</code></pre>
+<p></p>
+<div class="alert alert-primary"><p>Note: if you don't explicitly set the fair flag in the constructor, it will be <code class="language-java">false</code> by default.</p></div>
+<p></p>
+<p>In the next section, we will look at possible causes of a waiting queue so you will see why the idea of fairness can become important.</p>
+<h5 id="some-important-methods">Some important methods</h5>
+<p>Now we have our customized <code class="language-java">Semaphore</code>, but how can we get permits from it?</p>
+<ul><li><p>The <code class="language-java">public void acquire()</code> method will obtain a permit and reduce the number of available permits by one. If there are no permits left, the calling thread will be blocked.</p></li><li><p>If a permit is available, the <code class="language-java">public boolean tryAcquire()</code> method acquires a permit and decrements the counter similar to <code class="language-java">acquire()</code>. Then, it returns <code class="language-java">true</code>. Otherwise,  no permit is obtained, and <code class="language-java">false</code> is returned.</p></li></ul>
+<p>The return value is not the only thing that differentiates these two functions. The astute reader might have already noticed that we haven't said anything about what happens to the current thread if <code class="language-java">tryAcquire()</code> returns <code class="language-java">false</code>. Well, this is because <code class="language-java">tryAcquire()</code> returns immediately, regardless of the result of the call. Consequently, the calling thread will not try to access the resource again, even if a permit can be acquired. On the other hand, if a thread is blocked, it will remain blocked until a permit is available again.</p>
+<pre><code class="language-java">semaphore.acquire();
+System.out.println(semaphore.availablePermits()); // = 1
+semaphore.acquire();
+System.out.println(semaphore.availablePermits()); // = 0
+System.out.println(semaphore.tryAcquire()); // false
+semaphore.acquire(); //blocked</code></pre>
+<p>How can a permit become available again, you might ask?</p>
+<p>The <code class="language-java">release()</code> method will give us the answer. A thread calling the <code class="language-java">release()</code> function willingly gives up its access to the <a class="theory-lookup not-relevant" href="/learn/step/25127" rel="noopener noreferrer nofollow" target="_blank" title="In Java, a shared resource refers to a resource, such as a variable, file, input/output port, database, or other type of resource, that is accessed by multiple threads concurrently. | For example, if a class has a static field that is incremented by two threads, it is possible for one thread to see an intermediate value of the non-atomic operation, resulting in visibility and atomicity problems. This is because each thread may have its own local cache of variable values, and updates to shared variables may not be immediately visible to other threads. To avoid these issues, Java provides synchronization mechanisms, such as the `synchronized` keyword, which ensures that only one thread can access a critical section of code at a time.">shared resource</a> while incrementing the counter of the <code class="language-java">Semaphore</code> by one. As we said, if a thread happens to be waiting when a permit is released, it will be unblocked and gain access.</p>
+<pre><code class="language-java">semaphore.release();
+// A blocked thread will get access after this point</code></pre>
+<p>Who decides which thread will gain access next? The <code class="language-java">Semaphore</code>? The programmer? The truth lies somewhere in the middle. This is where our <strong>fair flag</strong> comes into play. By default, if multiple threads are waiting, it is hard to predict which thread gains access next. But if you have the fair flag set, the threads will unblock in the order they started waiting. This is a simple way to prevent <strong><a class="theory-lookup not-relevant" href="/learn/step/25127" rel="noopener noreferrer nofollow" target="_blank" title="In Java, thread starvation refers to a situation where a thread is unable to gain access to shared resources it requires to execute, causing it to wait indefinitely. | This can occur in scenarios where there are multiple threads competing for a limited number of resources, resulting in some threads being perpetually blocked. In the context of the provided explanation, thread starvation can happen if there are many threads trying to acquire permits from a limited number of available permits, causing some threads to continuously wait for their turn.">thread starvation</a></strong>, in which a thread is always waiting for other threads because of randomness.</p>
+<h5 id="the-parking-lot">The parking lot</h5>
+<p>Let's conclude our acquaintance with <code class="language-java">Semaphores</code> by elaborating on our previous analogy! Imagine that many shoppers are flooding the mall's parking lot (it's Black Friday, after all). They are all trying to park, but only two spots are left. This little demo program illustrates the situation using the <code class="language-java">Semaphore</code> class.</p>
+<pre><code class="language-java">public class ParkingLot {
+    public static void main(String[] args) {
+        Semaphore sem = new Semaphore(2);
+        for (int i = 0; i &lt; 50; ++i) {
+            Car car = new Car("Car #" + i, sem, 3000L);
+            car.goShopping();
+        }
+    }
+}
+class Car extends Thread {
+    private final Semaphore semaphore;
+    private final long timeout; // ms
+
+    public Car(String name, Semaphore semaphore, long timeout) {
+        super(name);
+        this.semaphore = semaphore;
+        this.timeout = timeout;
+    }
+
+    public void goShopping() {
+        start();
+    }
+
+    @Override
+    public void run() {
+        try {
+            if (!semaphore.tryAcquire()) {
+                System.out.println(Thread.currentThread().getName() + " waits for parking");
+                semaphore.acquire();
+            }
+            System.out.println(Thread.currentThread().getName() + " parked");
+            Thread.sleep(timeout); // shopping
+        } catch (InterruptedException e) {
+            System.out.println(Thread.currentThread().getName() + ": shopping was interrupted");
+            e.printStackTrace();
+        } finally {
+            System.out.println(Thread.currentThread().getName() + " left");
+            semaphore.release();
+        }
+    }
+}</code></pre>
+<p>As you can see from the standard output, all the running threads are trying to acquire a permit (parking space) from the <code class="language-java">Semaphore</code>, but only two will be allowed at a time.</p>
+<pre><code class="language-no-highlight">...
+Car #1 parked
+Car #5 parked
+Car #2 waits for parking
+Car #4 waits for parking
+Car #3 waits for parking
+Car #6 waits for parking
+Car #1 left
+Car #5 left
+Car #2 parked
+Car #3 parked
+Car #3 left
+Car #2 left
+Car #4 parked
+Car #6 parked
+...</code></pre>
+<p></p>
+<div class="alert alert-primary"><p>The <code class="language-java">sleep()</code> method is not an essential part of this code — its only purpose is to "slow down" the threads, so we can more easily follow what's happening. You can try it by running the code without the <code class="language-java">sleep()</code> call — the program's behavior will not change.</p></div>
+<p></p>
+<p>If this code initially looks a little confusing, that's perfectly okay. For now, you should only concentrate on the contents of the <code class="language-java">run()</code> method, as it contains the code we discussed in this topic. We kept the code of the surrounding program, so you can run it and experiment. Don't worry if you don't understand it. We will take a more detailed look at it in other topics!</p>
+<h5 id="conclusion">Conclusion</h5>
+<p>In this topic, we have shed some light on semaphores and how we can take advantage of them in multithreading applications. Feel free to use them in your future projects. Here's what we discussed:</p>
+<ul><li><p>What semaphores are and how you can initialize them.</p></li><li><p>How a thread can acquire and release permits from a semaphore.</p></li></ul>
+<p>Programming in a multithreading environment is never easy, but now that you are equipped with the power of the <code class="language-java">Semaphore</code> class, you stand a much better chance at taming your threads!</p>
+</div>
