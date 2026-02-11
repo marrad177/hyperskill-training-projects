@@ -1,0 +1,1 @@
+In diesem Repository sind meine Übungsprojekte enthalten, die begleitend zu Hyperskill-Kursen entstanden sind. Der Ordner Topics enthält Übungen, die am Ende einer Lerneinheit gelöst werden mussten. Dabei handelt es sich nicht ausschließlich um Quellcode. Der dort enthaltene Quellcode wurde teilweise von Hyperskill erstellt.
