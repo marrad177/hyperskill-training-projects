@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-        String path = "D:\\Hyperskill Jetbeans Projects\\Simple Search Engine (Java)\\Simple Search Engine (Java)\\task\\src\\search\\" + args[1];
+        String path = args[1];
         File file = new File(path);
         try(Scanner fileScanner = new Scanner(file)) {
             List<String> inputLines = new ArrayList<>(20);
@@ -29,9 +29,22 @@ public class Main {
                         inUse = false;
                         break;
                     case 1:
+                        System.out.println("\nSelect a matching strategy: ALL, ANY, NONE");
+                        String searchStrategy = consoleScanner.nextLine();
                         System.out.println("\nEnter a name or email to search all suitable people.");
-                        String searchTerm = consoleScanner.nextLine().toLowerCase();
-                        findPerson(inputLines, searchTerm);
+                        List<String> searchTerms = List.of(consoleScanner.nextLine().toLowerCase().split(" "));
+                        // invoke context for search strategy, set strategy
+                        SearchMethodContext searchMethodContext = new SearchMethodContext();
+                        searchMethodContext.setSearchMethod(searchStrategy);
+                        List<Integer> results = searchMethodContext.findPeople(inputLines, searchTerms);
+                        if(results.size() > 0) {
+                            System.out.printf("%d persons found:\n", results.size());
+                            for(int index : results) {
+                                System.out.println(inputLines.get(index));
+                            }
+                        } else {
+                            System.out.println("No matching people found.");
+                        }
                         break;
                     case 2:
                         printPeople(inputLines);
@@ -44,30 +57,6 @@ public class Main {
             }
        } catch (FileNotFoundException fnfe) {
             System.out.println(fnfe.getMessage());
-        }
-    }
-
-    static void findPerson(List<String> inputLines, String searchTerm) {
-        HashMap<String, ArrayList<Integer>> invertedIndex = new HashMap(32);
-        for(int i = 0; i < inputLines.size(); i++) {
-            for(String word : inputLines.get(i).split(" ")) {
-                if(invertedIndex.containsKey(word)) {
-                    invertedIndex.get(word).add(i);
-                } else {
-                    invertedIndex.put(word, new ArrayList(Arrays.asList(i)));
-                }
-            }
-        }
-        boolean notFound = true;
-
-        for(String word : inputLines) {
-            if(word.toLowerCase().contains(searchTerm)) {
-                System.out.println(word);
-                notFound = false;
-            }
-        }
-        if(notFound) {
-            System.out.println("No matching people found.");
         }
     }
 
