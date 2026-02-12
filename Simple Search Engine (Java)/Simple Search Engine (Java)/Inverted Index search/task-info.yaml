@@ -1,0 +1,12 @@
+type: edu
+files:
+  - name: src/search/Main.java
+    visible: true
+    learner_created: false
+  - name: test/SearchEngineTests.java
+    learner_created: false
+  - name: test/SimpleSearchEngineTest.java
+    learner_created: false
+feedback_link: https://hyperskill.org/projects/66/stages/358/implement#comment
+status: Unchecked
+record: 5

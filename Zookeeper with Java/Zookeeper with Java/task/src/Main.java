@@ -123,6 +123,6 @@ public class Main {
 
         String[] animals = {camel, lion, deer, goose, bat, rabbit};
 
-        // write your code here
+
     }
 }

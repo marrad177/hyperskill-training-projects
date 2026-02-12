@@ -1,0 +1,18 @@
+type: hyperskill
+title: Simple Search Engine (Java)
+language: English
+summary: "<p>Create your own search engine! It probably won’t compete with Google:\
+  \ yours will be a simple version which processes some data and searches it for a\
+  \ word or a phrase. Simple but cool.</p>"
+programming_language: Java
+programming_language_version: 11
+content:
+  - Simple Search Engine (Java)
+  - Topics
+additional_files:
+  - name: build.gradle
+    visible: true
+  - name: settings.gradle
+    visible: true
+mode: Study
+yaml_version: 5
