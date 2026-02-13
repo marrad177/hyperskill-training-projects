@@ -7,7 +7,7 @@
     <content url="file://$MODULE_DIR$/../../../../../../Battleship with Java/task/build/test-results/test">
       <sourceFolder url="file://$MODULE_DIR$/../../../../../../Battleship with Java/task/build/test-results/test" isTestSource="true" />
     </content>
-    <orderEntry type="jdk" jdkName="jbr-21" jdkType="JavaSDK" />
+    <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Battleships.Battleship_with_Java-task-build-test-results.main" />
     <orderEntry type="module" module-name="Battleships.util.main" />

@@ -1,14 +1,16 @@
-package battleship;
+package battleship.ships;
+
+import battleship.gamefield.Coordinates;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Ship {
-    protected List<Coordinates> coordinates;
+    public List<Coordinates> coordinates;
     protected Coordinates start;
     protected Coordinates tail;
     protected int length;
-    protected int type; // 5 - aircraft carrier, 4 - battleship, 3 - submarine/cruiser, 2 - destroyer
+    public int type; // 5 - aircraft carrier, 4 - battleship, 3 - submarine/cruiser, 2 - destroyer
 
     protected Ship(Coordinates start, Coordinates tail) {
         this.start = start;
@@ -60,50 +62,5 @@ public abstract class Ship {
             }
         }
         return coordinatesBuildList;
-    }
-}
-
-class AircraftCarrier extends Ship {
-    AircraftCarrier(Coordinates start, Coordinates tail) {
-        super(start, tail);
-        this.type = 5;
-        this.coordinates = Ship.buildShipCoordinates(start, tail);
-        this.length = Ship.getShipLength(start, tail, type);
-    }
-}
-
-class Battleship extends Ship {
-    Battleship(Coordinates start, Coordinates tail) {
-        super(start, tail);
-        this.type = 4;
-        this.coordinates = Ship.buildShipCoordinates(start, tail);
-        this.length = Ship.getShipLength(start, tail, type);
-    }
-}
-
-class Submarine extends Ship {
-    Submarine(Coordinates start, Coordinates tail) {
-        super(start, tail);
-        this.type = 3;
-        this.coordinates = Ship.buildShipCoordinates(start, tail);
-        this.length = Ship.getShipLength(start, tail, type);
-    }
-}
-
-class Cruiser extends Ship {
-    Cruiser(Coordinates start, Coordinates tail) {
-        super(start, tail);
-        this.type = 3;
-        this.coordinates = Ship.buildShipCoordinates(start, tail);
-        this.length = Ship.getShipLength(start, tail, type);
-    }
-}
-
-class Destroyer extends Ship {
-    Destroyer(Coordinates start, Coordinates tail) {
-        super(start, tail);
-        this.type = 2;
-        this.coordinates = Ship.buildShipCoordinates(start, tail);
-        this.length = Ship.getShipLength(start, tail, type);
     }
 }

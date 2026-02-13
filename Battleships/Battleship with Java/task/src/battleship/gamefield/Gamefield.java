@@ -1,14 +1,13 @@
-package battleship;
+package battleship.gamefield;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 public class Gamefield {
     // 10x10 Feld mit je einer Zeile bzw. Spalte für Metadaten
     String[][] gameField;
+    List<Coordinates> occupiedFields;
 
-    Gamefield() {
+    public Gamefield() {
         gameField = new String[11][11];
         gameField[0][0] = " ";   // field in upper left corner
         // table metadata assignment
@@ -23,32 +22,42 @@ public class Gamefield {
                 gameField[i][j] = "~";
             }
         }
+        this.occupiedFields = new ArrayList<>();
     }
 
     public boolean placeShip(List<Coordinates> coordinates) {
-        Deque<Coordinates> undoDeque = new ArrayDeque<>();
+        Deque<Coordinates> coordsDeque = new ArrayDeque<>();
         for(Coordinates coordinate : coordinates) {
             if(neighbourFree(coordinate.getM(), coordinate.getN())) {
                 gameField[coordinate.getM()][coordinate.getN()] = "o";
-                undoDeque.push(coordinate);
+                coordsDeque.push(coordinate);
             } else {
-                for(Coordinates undoCoordinate : undoDeque) {
+                for(Coordinates undoCoordinate : coordsDeque) {
                     gameField[undoCoordinate.getM()][undoCoordinate.getN()] = "~";
+                    coordsDeque.pop();
                 }
                 return false;
             }
         }
-        return true;
+        if(!coordsDeque.isEmpty()) {
+            this.occupiedFields.addAll(coordsDeque);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public boolean neighbourFree(int m, int n) {
-        if (gameField[m-1][n-1] == "o" || gameField[m-1][n] == "o" || gameField[m-1][n+1] == "o" ||
-                gameField[m][n-1] == "o" || gameField[m][n] == "o" || gameField[m][n+1] == "o" ||
-                gameField[m+1][n-1] == "o"|| gameField[m+1][n] == "o" || gameField[m+1][n+1] == "o") {
-            return false;
-        } else {
-            return true;
+        for (Coordinates coord : occupiedFields) {
+            if((coord.getM() == m-1 && (coord.getN() == n-1 || coord.getN() == n || coord.getN() == n+1)) ||
+                    (coord.getM() == m && (coord.getN() == n-1 || coord.getN() == n || coord.getN() == n+1)) ||
+                    (coord.getM() == m+1 && (coord.getN() == n-1 || coord.getN() == n || coord.getN() == n+1))
+                ) {
+                System.out.println(coord.getM() + " " + coord.getN() + " " + m + " " + n);
+                return false;
+            }
         }
+        return true;
     }
 
     public void printGamefield() {

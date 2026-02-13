@@ -1,4 +1,4 @@
-package battleship;
+package battleship.gamefield;
 
 public enum NCoord {
     A(1),
