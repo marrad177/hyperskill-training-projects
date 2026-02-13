@@ -26,7 +26,7 @@ public class Main {
                 Coordinates tailShip = extractCoordinatesFromInput(shipInput, "tail");
 
                 while(startShip.distance(tailShip) != Integer.parseInt(expectedShip[1])) {
-                    System.out.printf("Error! Wrong length of the %s! Try again:\n", expectedShip[0]);
+                    System.out.printf("\nError! Wrong length of the %s! Try again:\n", expectedShip[0]);
                     String newInput = scanner.nextLine();
                     startShip = extractCoordinatesFromInput(newInput, "start");
                     tailShip = extractCoordinatesFromInput(newInput, "tail");
@@ -42,7 +42,7 @@ public class Main {
                 };
 
                 while(!gamefield.placeShip(ship.coordinates)) {
-                    System.out.println("Error! You placed it too close to another one. Try again:");
+                    System.out.println("\nError! You placed it too close to another one. Try again:\n");
                     String newInput = scanner.nextLine();
                     startShip = extractCoordinatesFromInput(newInput, "start");
                     tailShip = extractCoordinatesFromInput(newInput, "tail");
@@ -52,8 +52,8 @@ public class Main {
                 gamefield.printGamefield();
             }
 
-            System.out.println("The game starts!\n");
-            gamefield.printGamefield();
+            System.out.println("\nThe game starts!\n");
+            gamefield.printMaskedGamefield();
             System.out.println("\nTake a shot!\n");
             String shotInput = scanner.nextLine();
             Coordinates shot = extractCoordinatesFromInput(shotInput, "start");
@@ -63,9 +63,11 @@ public class Main {
                 shot = extractCoordinatesFromInput(shotFixInput, "start");
             }
             if(gamefield.shoot(shot)) {
-                System.out.println("You hit a ship!");
+                gamefield.printMaskedGamefield();
+                System.out.println("\nYou hit a ship!\n");
             } else {
-                System.out.println("You missed!");
+                gamefield.printMaskedGamefield();
+                System.out.println("\nYou missed!\n");
             }
             gamefield.printGamefield();
         }

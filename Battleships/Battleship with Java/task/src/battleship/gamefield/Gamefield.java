@@ -9,19 +9,7 @@ public class Gamefield {
 
     public Gamefield() {
         gameField = new String[11][11];
-        // table metadata assignment
-        char aChar = 'a';
-        for(int i = 1; i <= 10; i++) {
-            gameField[0][i] = String.valueOf(i);
-            gameField[i][0] = String.valueOf(aChar).toUpperCase();
-            aChar++;
-        }
-        gameField[0][0] = " ";   // field in upper left corner
-        for (int i = 1; i < gameField.length; i++) {
-            for (int j = 1; j < gameField.length; j++) {
-                gameField[i][j] = "~";
-            }
-        }
+        fillGamefield();
         this.occupiedFields = new ArrayList<>();
     }
 
@@ -87,10 +75,38 @@ public class Gamefield {
         }
     }
 
+    public void fillGamefield() {
+        char aChar = 'a';
+        for(int i = 1; i <= 10; i++) {
+            gameField[0][i] = String.valueOf(i);
+            gameField[i][0] = String.valueOf(aChar).toUpperCase();
+            aChar++;
+        }
+        gameField[0][0] = " ";   // field in upper left corner
+        for (int i = 1; i < gameField.length; i++) {
+            for (int j = 1; j < gameField.length; j++) {
+                gameField[i][j] = "~";
+            }
+        }
+    }
+
     public void printGamefield() {
         for (int i = 0; i < gameField.length; i++) {
             for (int j = 0; j < gameField.length; j++)
                 System.out.print(gameField[i][j] + " ");
+            System.out.println();
+        }
+    }
+
+    public void printMaskedGamefield() {
+        for (int i = 0; i < gameField.length; i++) {
+            for (int j = 0; j < gameField.length; j++) {
+                String temp = gameField[i][j];
+                if("O".equals(temp)) {
+                    temp = "~";
+                }
+                System.out.print(temp + " ");
+            }
             System.out.println();
         }
     }
