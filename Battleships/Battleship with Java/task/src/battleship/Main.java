@@ -20,7 +20,7 @@ public class Main {
             String[][] allExpectedShips = {{"Aircraft Carrier", "5"}, {"Battleship", "4"}, {"Submarine", "3"},
                                 {"Cruiser", "3"}, {"Destroyer", "2"}};
             for(String[] expectedShip : allExpectedShips) {
-                System.out.printf("Enter the coordinates of the %s (%s cells):\n", expectedShip[0], expectedShip[1]);
+                System.out.printf("\nEnter the coordinates of the %s (%s cells):\n\n", expectedShip[0], expectedShip[1]);
                 String shipInput = scanner.nextLine();
                 Coordinates startShip = extractCoordinatesFromInput(shipInput, "start");
                 Coordinates tailShip = extractCoordinatesFromInput(shipInput, "tail");
@@ -48,19 +48,41 @@ public class Main {
                     tailShip = extractCoordinatesFromInput(newInput, "tail");
                     ship.buildShipCoordinates(startShip, tailShip);
                 }
-
-
+                System.out.println();
                 gamefield.printGamefield();
             }
+
+            System.out.println("The game starts!\n");
+            gamefield.printGamefield();
+            System.out.println("\nTake a shot!\n");
+            String shotInput = scanner.nextLine();
+            Coordinates shot = extractCoordinatesFromInput(shotInput, "start");
+            while(!Gamefield.onGamefield(shot)) {
+                System.out.println("\nError! You entered the wrong coordinates! Try again:\n");
+                String shotFixInput = scanner.nextLine();
+                shot = extractCoordinatesFromInput(shotFixInput, "start");
+            }
+            if(gamefield.shoot(shot)) {
+                System.out.println("You hit a ship!");
+            } else {
+                System.out.println("You missed!");
+            }
+            gamefield.printGamefield();
         }
     }
 
     static Coordinates extractCoordinatesFromInput(String inputString, String coordType) {
-        Coordinates coordinates = switch (coordType) {
-            case "start" -> new Coordinates(inputString.split(" ")[0]);
-            case "tail" -> new Coordinates(inputString.split(" ")[1]);
-            default -> new Coordinates(0,0);
-        };
+        Coordinates coordinates;
+        try {
+            coordinates = switch (coordType) {
+                case "start" -> new Coordinates(inputString.split(" ")[0]);
+                case "tail" -> new Coordinates(inputString.split(" ")[1]);
+                default -> new Coordinates(0,0);
+            };
+        } catch (IllegalArgumentException iae) {
+            coordinates = new Coordinates(-1, -1);
+        }
+
         return coordinates;
     }
 }

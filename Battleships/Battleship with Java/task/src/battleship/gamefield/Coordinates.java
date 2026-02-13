@@ -10,8 +10,8 @@ public class Coordinates {
     }
 
     public Coordinates(String inputString) {
-        String startStringM = inputString.split(" ")[0].split("")[0];
-        this.m = NCoord.valueOf(startStringM).getNumber();
+        String coordinatesString = inputString.split(" ")[0].split("")[0];
+        this.m = NCoord.valueOf(coordinatesString).getNumber();
         this.n = Integer.parseInt(inputString.split(" ")[0].substring(1));
     }
 
@@ -38,24 +38,6 @@ public class Coordinates {
             return Math.abs(this.getM() - newCoordinates.getM()) + 1;
         } else {
             return 0;
-        }
-    }
-
-    public static boolean onGamefield(int m, int n) {
-        if(m > 0 && m <= 10 && n > 0 && n <= 10) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public static boolean onGamefield(Coordinates coordinates) {
-        int m = coordinates.getM();
-        int n = coordinates.getN();
-        if(m > 0 && m <= 10 && n > 0 && n <= 10) {
-            return true;
-        } else {
-            return false;
         }
     }
 }

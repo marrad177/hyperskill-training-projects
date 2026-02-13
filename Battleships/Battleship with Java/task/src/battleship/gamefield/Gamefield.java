@@ -9,7 +9,6 @@ public class Gamefield {
 
     public Gamefield() {
         gameField = new String[11][11];
-        gameField[0][0] = " ";   // field in upper left corner
         // table metadata assignment
         char aChar = 'a';
         for(int i = 1; i <= 10; i++) {
@@ -17,6 +16,7 @@ public class Gamefield {
             gameField[i][0] = String.valueOf(aChar).toUpperCase();
             aChar++;
         }
+        gameField[0][0] = " ";   // field in upper left corner
         for (int i = 1; i < gameField.length; i++) {
             for (int j = 1; j < gameField.length; j++) {
                 gameField[i][j] = "~";
@@ -57,6 +57,34 @@ public class Gamefield {
             }
         }
         return true;
+    }
+
+    public boolean shoot(Coordinates coordinates) {
+        if(gameField[coordinates.getM()][coordinates.getN()] == "O") {
+            gameField[coordinates.getM()][coordinates.getN()] = "X";
+            return true;
+        } else {
+            gameField[coordinates.getM()][coordinates.getN()] = "M";
+            return false;
+        }
+    }
+
+    public static boolean onGamefield(int m, int n) {
+        if(m > 0 && m <= 10 && n > 0 && n <= 10) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static boolean onGamefield(Coordinates coordinates) {
+        int m = coordinates.getM();
+        int n = coordinates.getN();
+        if(m > 0 && m <= 10 && n > 0 && n <= 10) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public void printGamefield() {

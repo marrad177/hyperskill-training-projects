@@ -1,6 +1,7 @@
 package battleship.ships;
 
 import battleship.gamefield.Coordinates;
+import battleship.gamefield.Gamefield;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +32,7 @@ public abstract class Ship {
 
     public void buildShipCoordinates(Coordinates start, Coordinates tail) {
         List<Coordinates> coordinatesBuildList = new ArrayList<>(8);
-        if (start.getM() == tail.getM() && Coordinates.onGamefield(start) && Coordinates.onGamefield(tail)) {
+        if (start.getM() == tail.getM() && Gamefield.onGamefield(start) && Gamefield.onGamefield(tail)) {
             if (start.getN() >= tail.getN()) {
                 for (int i = start.getN(); i >= tail.getN(); i--) {
                     coordinatesBuildList.add(new Coordinates(start.getM(), i));
@@ -41,7 +42,7 @@ public abstract class Ship {
                     coordinatesBuildList.add(new Coordinates(start.getM(), i));
                 }
             }
-        } else if (start.getN() == tail.getN() && Coordinates.onGamefield(start) && Coordinates.onGamefield(tail)) {
+        } else if (start.getN() == tail.getN() && Gamefield.onGamefield(start) && Gamefield.onGamefield(tail)) {
             if (start.getM() >= tail.getM()) {
                 for (int i = start.getM(); i >= tail.getM(); i--) {
                     coordinatesBuildList.add(new Coordinates(i, start.getN()));
