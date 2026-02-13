@@ -29,7 +29,7 @@ public class Gamefield {
         Deque<Coordinates> coordsDeque = new ArrayDeque<>();
         for(Coordinates coordinate : coordinates) {
             if(neighbourFree(coordinate.getM(), coordinate.getN())) {
-                gameField[coordinate.getM()][coordinate.getN()] = "o";
+                gameField[coordinate.getM()][coordinate.getN()] = "O";
                 coordsDeque.push(coordinate);
             } else {
                 for(Coordinates undoCoordinate : coordsDeque) {
@@ -53,7 +53,6 @@ public class Gamefield {
                     (coord.getM() == m && (coord.getN() == n-1 || coord.getN() == n || coord.getN() == n+1)) ||
                     (coord.getM() == m+1 && (coord.getN() == n-1 || coord.getN() == n || coord.getN() == n+1))
                 ) {
-                System.out.println(coord.getM() + " " + coord.getN() + " " + m + " " + n);
                 return false;
             }
         }

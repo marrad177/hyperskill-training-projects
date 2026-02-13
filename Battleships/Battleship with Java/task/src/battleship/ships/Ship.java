@@ -9,36 +9,27 @@ public abstract class Ship {
     public List<Coordinates> coordinates;
     protected Coordinates start;
     protected Coordinates tail;
-    protected int length;
-    public int type; // 5 - aircraft carrier, 4 - battleship, 3 - submarine/cruiser, 2 - destroyer
+    protected int length;   // 5 - aircraft carrier, 4 - battleship, 3 - submarine/cruiser, 2 - destroyer
+    protected String name;
 
     protected Ship(Coordinates start, Coordinates tail) {
         this.start = start;
         this.tail = tail;
     }
 
-    public static int getShipLength(Coordinates start, Coordinates tail, int type) {
-        int tempLength;
-        if (start.getM() == tail.getM() && Coordinates.onGamefield(start) && Coordinates.onGamefield(tail)) {
-            tempLength = Math.abs(start.getN() - start.getN()) + 1;
-            if(tempLength > type) {
-                return -1;
-            } else {
-                return tempLength;
-            }
-        } else if (start.getN() == tail.getN() && Coordinates.onGamefield(start) && Coordinates.onGamefield(tail)) {
-            tempLength = Math.abs(start.getM() - start.getM()) + 1;
-            if(tempLength > type) {
-                return -1;
-            } else {
-                return tempLength;
-            }
-        } else {
-            return -1;
-        }
+    public String getName() {
+        return name;
     }
 
-    public static List<Coordinates> buildShipCoordinates(Coordinates start, Coordinates tail) {
+    public int getLength() {
+        return length;
+    }
+
+    public List<Coordinates> getCoordinates() {
+        return coordinates;
+    }
+
+    public void buildShipCoordinates(Coordinates start, Coordinates tail) {
         List<Coordinates> coordinatesBuildList = new ArrayList<>(8);
         if (start.getM() == tail.getM() && Coordinates.onGamefield(start) && Coordinates.onGamefield(tail)) {
             if (start.getN() >= tail.getN()) {
@@ -61,6 +52,6 @@ public abstract class Ship {
                 }
             }
         }
-        return coordinatesBuildList;
+        this.coordinates = coordinatesBuildList;
     }
 }
