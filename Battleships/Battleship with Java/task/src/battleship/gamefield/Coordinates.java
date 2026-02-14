@@ -1,8 +1,14 @@
 package battleship.gamefield;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 public class Coordinates {
     private int m;
     private int n;
+    Map<String, Integer> dictMtoNumber;
 
     public Coordinates(int m, int n) {
         this.m = m;
@@ -11,7 +17,22 @@ public class Coordinates {
 
     public Coordinates(String inputString) {
         String coordinatesString = inputString.split(" ")[0].split("")[0];
-        this.m = NCoord.valueOf(coordinatesString).getNumber();
+        dictMtoNumber = new HashMap<>();
+        dictMtoNumber.put("A",1);
+        dictMtoNumber.put("B",2);
+        dictMtoNumber.put("C",3);
+        dictMtoNumber.put("D",4);
+        dictMtoNumber.put("E",5);
+        dictMtoNumber.put("F",6);
+        dictMtoNumber.put("G",7);
+        dictMtoNumber.put("H",8);
+        dictMtoNumber.put("I",9);
+        dictMtoNumber.put("J",10);
+        if(dictMtoNumber.containsKey(coordinatesString.toUpperCase())) {
+            this.m = dictMtoNumber.get(coordinatesString.toUpperCase());
+        } else {
+            throw new IllegalArgumentException();
+        }
         this.n = Integer.parseInt(inputString.split(" ")[0].substring(1));
     }
 
@@ -19,16 +40,8 @@ public class Coordinates {
         return m;
     }
 
-    public void setM(int m) {
-        this.m = m;
-    }
-
     public int getN() {
         return n;
-    }
-
-    public void setN(int n) {
-        this.n = n;
     }
 
     public int distance(Coordinates newCoordinates) {

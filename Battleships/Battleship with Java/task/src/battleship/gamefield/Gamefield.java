@@ -5,12 +5,14 @@ import java.util.*;
 public class Gamefield {
     // 10x10 Feld mit je einer Zeile bzw. Spalte für Metadaten
     String[][] gameField;
-    List<Coordinates> occupiedFields;
+    Set<Coordinates> occupiedFields;
+    int countOccupiedFields;
 
     public Gamefield() {
         gameField = new String[11][11];
         fillGamefield();
-        this.occupiedFields = new ArrayList<>();
+        this.occupiedFields = new HashSet<>();
+        this.countOccupiedFields = 0;
     }
 
     public boolean placeShip(List<Coordinates> coordinates) {
@@ -28,11 +30,16 @@ public class Gamefield {
             }
         }
         if(!coordsDeque.isEmpty()) {
-            this.occupiedFields.addAll(coordsDeque);
+            occupiedFields.addAll(coordsDeque);
+            countOccupiedFields += coordsDeque.size();
             return true;
         } else {
             return false;
         }
+    }
+
+    public int getShipPartsLeft() {
+        return countOccupiedFields;
     }
 
     public boolean neighbourFree(int m, int n) {
@@ -48,8 +55,10 @@ public class Gamefield {
     }
 
     public boolean shoot(Coordinates coordinates) {
-        if(gameField[coordinates.getM()][coordinates.getN()] == "O") {
+        if(gameField[coordinates.getM()][coordinates.getN()] == "O" ||
+                gameField[coordinates.getM()][coordinates.getN()] == "X") {
             gameField[coordinates.getM()][coordinates.getN()] = "X";
+            countOccupiedFields--;
             return true;
         } else {
             gameField[coordinates.getM()][coordinates.getN()] = "M";

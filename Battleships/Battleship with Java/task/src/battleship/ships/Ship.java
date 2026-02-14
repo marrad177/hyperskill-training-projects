@@ -55,4 +55,9 @@ public abstract class Ship {
         }
         this.coordinates = coordinatesBuildList;
     }
+
+    public int takeAHit(Coordinates deleteCoordinates)  {
+        coordinates.remove(deleteCoordinates);
+        return --length;
+    }
 }
