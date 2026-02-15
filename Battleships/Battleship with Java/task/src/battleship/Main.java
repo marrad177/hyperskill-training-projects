@@ -62,8 +62,9 @@ public class Main {
         while (!shipList.isEmpty()) {
             gamefield.printMaskedGamefield();
             String shotInput = gamefield.promptInput("Take a shot!");
-            while(!CoordUtils.validateInput(shotInput, 2)) {
-                shotInput = gamefield.promptInput("Input Error! \"MN MN\" expected. Try again:");
+//            while(!CoordUtils.validateInput(shotInput, 1)) {
+            while("[A-F]+\\d{1,2}".equals(shotInput)) {
+                shotInput = gamefield.promptInput("Input Error! \"MN\" expected. Try again:");
             }
             Coordinates shot = CoordUtils.extractShotCoordinates(shotInput);
             while (!Gamefield.onGamefield(shot)) {
@@ -85,6 +86,7 @@ public class Main {
                     if (deleteCoordinates != null) {
                         ship.getCoordinates().remove(deleteCoordinates);
                     }
+                    System.out.println(ship.getCoordinates().size());
                     if (ship.getCoordinates().isEmpty()) {
                         deleteShip = ship;
                         break;
