@@ -22,6 +22,9 @@ public class Main {
         for (String[] expectedShip : allExpectedShips) {
             String inputShip =
                 gamefield.promptInput("Enter the coordinates of the " + expectedShip[0] + " (" + expectedShip[1] + " cells):");
+            while(!CoordUtils.validateInput(inputShip, 2)) {
+                inputShip = gamefield.promptInput("Input Error! \"MN MN\" expected. Try again:");
+            }
             Coordinates[] startTailShip = CoordUtils.extractShipPlacementCoordinates(inputShip);
 
             while (startTailShip[0].distance(startTailShip[1]) != Integer.parseInt(expectedShip[1]) ||
@@ -47,7 +50,7 @@ public class Main {
 
             while (!gamefield.placeShip(ship.coordinates)) {
                 String newInput = gamefield.promptInput("Error! You placed it too close to another one. Try again:");
-                startTailShip = CoordUtils.extractShipPlacementCoordinates(inputShip);
+                startTailShip = CoordUtils.extractShipPlacementCoordinates(newInput);
                 ship.buildShipCoordinates(startTailShip[0], startTailShip[1]);
             }
             shipList.add(ship);
@@ -59,6 +62,9 @@ public class Main {
         while (!shipList.isEmpty()) {
             gamefield.printMaskedGamefield();
             String shotInput = gamefield.promptInput("Take a shot!");
+            while(!CoordUtils.validateInput(shotInput, 2)) {
+                shotInput = gamefield.promptInput("Input Error! \"MN MN\" expected. Try again:");
+            }
             Coordinates shot = CoordUtils.extractShotCoordinates(shotInput);
             while (!Gamefield.onGamefield(shot)) {
                 String shotFixInput =
@@ -73,6 +79,7 @@ public class Main {
                     for (Coordinates coordinate : ship.getCoordinates()) {
                         if (coordinate.equals(shot)) {
                             deleteCoordinates = coordinate;
+                            break;
                         }
                     }
                     if (deleteCoordinates != null) {
