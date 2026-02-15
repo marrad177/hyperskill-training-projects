@@ -4,6 +4,7 @@ import java.util.*;
 
 public class Gamefield {
     // 10x10 Feld mit je einer Zeile bzw. Spalte für Metadaten
+    Scanner scanner;
     String[][] gameField;
     Set<Coordinates> occupiedFields;
     int countOccupiedFields;
@@ -13,6 +14,12 @@ public class Gamefield {
         fillGamefield();
         this.occupiedFields = new HashSet<>();
         this.countOccupiedFields = 0;
+        this.scanner = new Scanner(System.in);
+    }
+
+    public String promptInput(String message) {
+            System.out.println(message);
+            return scanner.nextLine();
     }
 
     public boolean placeShip(List<Coordinates> coordinates) {
@@ -36,10 +43,6 @@ public class Gamefield {
         } else {
             return false;
         }
-    }
-
-    public int getShipPartsLeft() {
-        return countOccupiedFields;
     }
 
     public boolean neighbourFree(int m, int n) {
@@ -105,6 +108,7 @@ public class Gamefield {
                 System.out.print(gameField[i][j] + " ");
             System.out.println();
         }
+        System.out.println();
     }
 
     public void printMaskedGamefield() {
@@ -118,5 +122,10 @@ public class Gamefield {
             }
             System.out.println();
         }
+        System.out.println();
+    }
+
+    public void printMessage(String msg) {
+        System.out.println(msg);
     }
 }

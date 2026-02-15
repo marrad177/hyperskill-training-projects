@@ -1,9 +1,7 @@
 package battleship.gamefield;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 public class Coordinates {
     private int m;
@@ -51,6 +49,14 @@ public class Coordinates {
             return Math.abs(this.getM() - newCoordinates.getM()) + 1;
         } else {
             return 0;
+        }
+    }
+
+    public boolean equals(Coordinates equalsCoordinates) {
+        if((this.getM() == equalsCoordinates.getM()) && (this.getN() == equalsCoordinates.getN())) {
+            return true;
+        } else {
+            return false;
         }
     }
 }
