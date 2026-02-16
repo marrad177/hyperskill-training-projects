@@ -76,78 +76,15 @@ public class Battle {
 
         }
 
-//        promptInput("Press Enter and pass the move to another player\n...");
-//
-//        printMessage("Player 2 place your ships on the game field");
-//        gamefieldPlayer2.printGamefield();
-//        for (String[] expectedShip : allExpectedShips) {
-//            String shipInput =
-//                    promptInput("Enter the coordinates of the " + expectedShip[0] + " (" + expectedShip[1] + " cells):");
-//            Pattern shipInputPattern = Pattern.compile("\\b[a-jA-J][1-9][^1-9]?\\b\\s+\\b[a-jA-J][1-9][^1-9]?\\b");
-//            Matcher shipInputMatcher = shipInputPattern.matcher(shipInput);
-//            while (!shipInputMatcher.matches()) {
-//                shipInput = promptInput("Input Error! \"MN MN\" expected. Try again:");
-//                shipInputMatcher = shipInputPattern.matcher(shipInput);
-//            }
-//            Coordinates[] startTailShip = CoordUtils.extractShipPlacementCoordinates(shipInput);
-//
-//            while (startTailShip[0].distance(startTailShip[1]) != Integer.parseInt(expectedShip[1]) ||
-//                    !Gamefield.onGamefield(startTailShip[0]) || !Gamefield.onGamefield(startTailShip[1])) {
-//                String newInput = new String();
-//                if (!Gamefield.onGamefield(startTailShip[0]) || !Gamefield.onGamefield(startTailShip[1])) {
-//                    newInput = promptInput("Error! Coordinates not on battlefield! Try again:");
-//                } else if (startTailShip[0].distance(startTailShip[1]) != Integer.parseInt(expectedShip[1])) {
-//                    newInput =
-//                            promptInput("Error! Wrong length of the " + expectedShip[0] + "! Try again:");
-//                }
-//                startTailShip = CoordUtils.extractShipPlacementCoordinates(newInput);
-//            }
-//
-//            Ship ship = new Ship(expectedShip[0], expectedShip[1], startTailShip[0], startTailShip[1]);
-//
-//            while (!gamefieldPlayer2.placeShip(ship.getCoordinates())) {
-//                String newInput = promptInput("Error! You placed it too close to another one. Try again:");
-//                startTailShip = CoordUtils.extractShipPlacementCoordinates(newInput);
-//                ship.buildShipCoordinates(startTailShip[0], startTailShip[1]);
-//            }
-//            shipListPlayer2.add(ship);
-//            System.out.println();
-//            gamefieldPlayer2.printGamefield();
-//        }
-
         printMessage("The game starts!");
     }
 
     public int takeAShot(int player) {
-        Gamefield enemyGamefield;
-        Gamefield ownGamefield;
-        List<Ship> enemyShipList;
-        int nextPlayer;
-
-        switch (player) {
-            case 1:
-                enemyGamefield = emptyGamefield;
-                enemyShipList = shipListPlayer2;
-                ownGamefield = gamefieldPlayer1;
-                nextPlayer = 2;
-                break;
-            case 2:
-                enemyGamefield = emptyGamefield;
-                enemyShipList = shipListPlayer1;
-                ownGamefield = gamefieldPlayer2;
-                nextPlayer = 1;
-                break;
-            default:
-                enemyGamefield = null;
-                enemyShipList = null;
-                nextPlayer = 0;
-                ownGamefield = null;
-                System.out.println("Unknown Player.");
-        }
-
-        enemyGamefield.printMaskedGamefield();
-        System.out.println("---------------------");
-        ownGamefield.printMaskedGamefield();
+        int nextPlayer = switch (player) {
+            case 1 -> 2;
+            case 2 -> 1;
+            default -> 0;
+        };
         String shotInput = promptInput("Player " + player + ", it's your turn:");
         Pattern shotInputPattern = Pattern.compile("\\b[a-jA-J][1-9]0?\\b");
         Matcher shotInputMatcher = shotInputPattern.matcher(shotInput);
@@ -162,9 +99,9 @@ public class Battle {
             shot = CoordUtils.extractShotCoordinates(shotFixInput);
         }
         String hitMsg = new String();
-        if (enemyGamefield.shoot(shot)) {
+        if (gamefieldPlayer1.shoot(shot)) {
             Ship deleteShip = null;
-            for (Ship ship : enemyShipList) {
+            for (Ship ship : shipListPlayer1) {
                 Coordinates deleteCoordinates = null;
                 for (Coordinates coordinate : ship.getCoordinates()) {
                     if (coordinate.equals(shot)) {
@@ -181,9 +118,9 @@ public class Battle {
                 }
             }
             if (deleteShip != null) {
-                enemyShipList.remove(deleteShip);
-                if (enemyShipList.isEmpty()) {
-                    enemyGamefield.printMaskedGamefield();
+                shipListPlayer1.remove(deleteShip);
+                if (shipListPlayer1.isEmpty()) {
+                    gamefieldPlayer1.printMaskedGamefield();
                     hitMsg = "You sank the last ship. You won. Congratulations!";
                     scanner.close();
 
@@ -197,6 +134,9 @@ public class Battle {
         printMessage(hitMsg.toString());
         printMessage("Press Enter and pass the move to another player");
         promptInput("...");
+        emptyGamefield.printGamefield();
+        System.out.println("---------------------");
+        gamefieldPlayer1.printMaskedGamefield();
         return nextPlayer;
     }
 
