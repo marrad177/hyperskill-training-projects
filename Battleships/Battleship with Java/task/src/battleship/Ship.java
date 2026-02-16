@@ -13,7 +13,7 @@ public class Ship {
     private int length;   // 5 - aircraft carrier, 4 - battleship, 3 - submarine/cruiser, 2 - destroyer
     private String name;
 
-    protected Ship(String name, String length, Coordinates start, Coordinates tail) {
+    public Ship(String name, String length, Coordinates start, Coordinates tail) {
         this.name = name;
         this.length = Integer.parseInt(length);
         this.start = start;
