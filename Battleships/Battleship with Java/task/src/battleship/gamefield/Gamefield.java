@@ -18,8 +18,9 @@ public class Gamefield {
     }
 
     public String promptInput(String message) {
-            System.out.println(message);
-            return scanner.nextLine();
+        System.out.println(message);
+        System.out.println();
+        return scanner.nextLine();
     }
 
     public boolean placeShip(List<Coordinates> coordinates) {
@@ -65,14 +66,6 @@ public class Gamefield {
             return true;
         } else {
             gameField[coordinates.getM()][coordinates.getN()] = "M";
-            return false;
-        }
-    }
-
-    public static boolean onGamefield(int m, int n) {
-        if(m > 0 && m <= 10 && n > 0 && n <= 10) {
-            return true;
-        } else {
             return false;
         }
     }
@@ -126,6 +119,8 @@ public class Gamefield {
     }
 
     public void printMessage(String msg) {
+        System.out.println();
         System.out.println(msg);
+        System.out.println();
     }
 }

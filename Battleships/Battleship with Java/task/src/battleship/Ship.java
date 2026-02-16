@@ -1,4 +1,4 @@
-package battleship.ships;
+package battleship;
 
 import battleship.gamefield.Coordinates;
 import battleship.gamefield.Gamefield;
@@ -6,16 +6,19 @@ import battleship.gamefield.Gamefield;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Ship {
-    public List<Coordinates> coordinates;
-    protected Coordinates start;
-    protected Coordinates tail;
-    protected int length;   // 5 - aircraft carrier, 4 - battleship, 3 - submarine/cruiser, 2 - destroyer
-    protected String name;
+public class Ship {
+    private List<Coordinates> coordinates;
+    private Coordinates start;
+    private Coordinates tail;
+    private int length;   // 5 - aircraft carrier, 4 - battleship, 3 - submarine/cruiser, 2 - destroyer
+    private String name;
 
-    protected Ship(Coordinates start, Coordinates tail) {
+    protected Ship(String name, String length, Coordinates start, Coordinates tail) {
+        this.name = name;
+        this.length = Integer.parseInt(length);
         this.start = start;
         this.tail = tail;
+        this.buildShipCoordinates(start, tail);
     }
 
     public String getName() {
@@ -28,6 +31,10 @@ public abstract class Ship {
 
     public List<Coordinates> getCoordinates() {
         return coordinates;
+    }
+
+    public void removeCoordinates(Coordinates coordinates) {
+        this.coordinates.removeIf(coords -> coords.equals(coordinates));
     }
 
     public void buildShipCoordinates(Coordinates start, Coordinates tail) {

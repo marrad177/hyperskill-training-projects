@@ -53,27 +53,4 @@ public class CoordUtils {
         }
         return startTail;
     }
-
-    public static boolean validateInput(String inputString, int numberCoordinates) {
-        if(numberCoordinates == 2) {
-            if(inputString.split(" ").length == 2 &&
-                    inputString.split(" ")[0].split("").length >= 2 &&
-                    inputString.split(" ")[0].split("").length <= 3 &&
-                    inputString.split(" ")[1].split("").length >= 2 &&
-                    inputString.split(" ")[1].split("").length <= 3) {
-                return true;
-            } else {
-                return false;
-            }
-        } if (numberCoordinates == 1) {
-            if(inputString.split("").length == 2) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
-
-    }
 }
