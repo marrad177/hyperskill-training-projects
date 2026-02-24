@@ -10,63 +10,44 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.logging.*;
+import java.net.SocketException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main {
+    private static String address = "127.0.0.1";
+    private static int port = 23456;
+    private static boolean appRunning = true;
+    private static ClientHandler clientHandler;
+    private static ServerSocket server;
+
     public static void main(String[] args) {
         Logger logger = Logger.getLogger(Main.class.getName());
         Handler consoleHandler = new ConsoleHandler();
         logger.addHandler(consoleHandler);
         logger.log(Level.ALL, "Log");
-        boolean appRunning = true;
-        String address = "127.0.0.1";
-        int port = 23456;
 
-        try(ServerSocket server = new ServerSocket(port, 50, InetAddress.getByName(address))) {
-            DataBase dataBase = new DataBase();
+        try{
+            server = new ServerSocket(port, 50, InetAddress.getByName(address));
+            ExecutorService executorService = Executors.newCachedThreadPool();
             System.out.println("Server started!");
             while (appRunning) {
-                Socket socket = server.accept();
-                DataInputStream input = new DataInputStream(socket.getInputStream());
-                DataOutputStream output  = new DataOutputStream(socket.getOutputStream());
-                Gson gson = new Gson();
-                ClientRequest clientRequest = gson.fromJson(input.readUTF(), ClientRequest.class);
-                ServerResponse serverResponse;
-                switch (clientRequest.getType()) {
-                    case "exit":
-                        serverResponse = new ServerResponse("OK");
-                        appRunning = false;
-                        break;
-                    case "get":
-                        if(!dataBase.readDataBase(clientRequest.getKey()).equals("ERROR")) {
-                            serverResponse = new ServerResponse("OK", dataBase.readDataBase(clientRequest.getKey()));
-                        } else {
-                            serverResponse = new ServerResponse("ERROR");
-                            serverResponse.setReason("No such key");
-                        }
-                        break;
-                    case "set":
-                        dataBase.updateDataBase(clientRequest.getKey(), clientRequest.getValue());
-                        serverResponse = new ServerResponse("OK");
-                        break;
-                    case "delete":
-                        if(!dataBase.readDataBase(clientRequest.getKey()).equals("ERROR")) {
-                            dataBase.deleteEntry(clientRequest.getKey());
-                            serverResponse = new ServerResponse("OK");
-                        } else {
-                            serverResponse = new ServerResponse("ERROR");
-                            serverResponse.setReason("No such key");
-                        }
-                        break;
-                    default:
-                        serverResponse = new ServerResponse("ERROR");
-                }
-                output.writeUTF(gson.toJson(serverResponse));
+                clientHandler = new ClientHandler(server.accept());
+                executorService.execute(clientHandler);
             }
+            server.close();
+        } catch (SocketException se) {
+            appRunning = false;
         } catch (IndexOutOfBoundsException ioobe) {
             System.out.println("ERROR");
         } catch (IOException ioe) {
-            logger.log( Level.SEVERE, ioe.toString(), ioe );
+            logger.log(Level.SEVERE, ioe.toString(), ioe);
         }
     }
 }
