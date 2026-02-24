@@ -3,7 +3,7 @@ package payload;
 public class ClientRequest {
     private String type;
     private String key;
-    private String value;
+    private Object value;
 
     public ClientRequest(String commandType, String key, String message) {
         this.type = commandType;
@@ -19,11 +19,11 @@ public class ClientRequest {
         this.type = commandType;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
-    public void setValue(String message) {
+    public void setValue(Object message) {
         this.value = message;
     }
 
