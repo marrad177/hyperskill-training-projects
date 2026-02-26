@@ -1,15 +1,17 @@
 package payload;
 
+import com.google.gson.JsonElement;
+
 public class ServerResponse {
     private String response;
-    private String value;
+    private JsonElement value;
     private String reason;
 
     public ServerResponse(String response) {
         this.response = response;
     }
 
-    public ServerResponse(String response, String value) {
+    public ServerResponse(String response, JsonElement value) {
         this.response = response;
         this.value = value;
     }
@@ -22,11 +24,11 @@ public class ServerResponse {
         this.response = response;
     }
 
-    public String getValue() {
+    public JsonElement getValue() {
         return value;
     }
 
-    public void setValue(String responseValue) {
+    public void setValue(JsonElement responseValue) {
         this.value = responseValue;
     }
 

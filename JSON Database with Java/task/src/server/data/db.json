@@ -1,4 +1,1 @@
-{"key":"2","value":"Bye World"}
-{"key":"3","value":"okokok"}
-{"key":"name","value":"Sorabh"}
-{"key":"\"person\"","value":"{\"name\":\"Elon Musk\",\"car\":{\"model\":\"Tesla Roadster\",\"year\":\"2018\"},\"rocket\":{\"name\":\"Falcon 9\",\"launches\":\"87\"}}"}
+{"person":{"name":"Elon Musk","car":{"model":"Tesla Roadster"},"rocket":{"name":"Falcon 9","launches":"88"}}}
